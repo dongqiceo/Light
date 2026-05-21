@@ -24,7 +24,7 @@ services:
       dockerfile: Dockerfile
     image: light-web:latest
     ports:
-      - "8080:80"
+      - "80:80"
     depends_on:
       - backend
 
@@ -34,6 +34,6 @@ services:
       dockerfile: Dockerfile
     image: light-cms:latest
     ports:
-      - "8081:17070"
+      - "17070:80"
     depends_on:
       - backend
