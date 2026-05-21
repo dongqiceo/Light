@@ -8,16 +8,26 @@ import { request as requestHelper, history } from '@umijs/max';
 export async function getInitialState() {
   const token = localStorage.getItem('token');
   if (token) {
-    // 实际项目中应该验证 token 是否有效
-    return {
-      token,
-      user: {
-        id: 0,
-        name: 'Admin',
-        nickName: 'Admin',
-        gender: 'MALE',
-      },
-    };
+    try {
+      // 从后端验证并获取用户信息
+      const response = await requestHelper('/api/v1/user/current', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      if (response.code === 100000 && response.data) {
+        return {
+          token,
+          user: response.data,
+        };
+      }
+    } catch (error) {
+      console.log('获取用户信息失败', error);
+    }
+    // token 无效，清除
+    localStorage.removeItem('token');
   }
   return { token: null, user: null };
 }
@@ -30,7 +40,13 @@ export const layout = () => {
     },
     logout: async () => {
       try {
-        await requestHelper('/api/v1/logout');
+        const token = localStorage.getItem('token');
+        await requestHelper('/api/v1/logout', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
         localStorage.removeItem('token');
         message.success('退出成功');
         history.replace('/login');
@@ -44,10 +60,25 @@ export const layout = () => {
 };
 
 export const request = {
+  requestInterceptors: [
+    (config) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        config.headers = config.headers || {};
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+  ],
   responseInterceptors: [
     (response) => {
       const { code, message: msg } = response.data;
-      if (code !== 100000) {
+      if (code === 401) {
+        // token 过期或无效
+        localStorage.removeItem('token');
+        history.replace('/login');
+        message.error('登录已过期，请重新登录');
+      } else if (code !== 100000) {
         message.error(msg || '操作失败');
       }
       return response;
