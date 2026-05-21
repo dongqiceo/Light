@@ -11,3 +11,4 @@
 **/dist
 **/.mfsu
 **/.swc
+service-java/target/*
