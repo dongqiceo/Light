@@ -1,0 +1,31 @@
+
+// 滚动条样式优化
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: #e8e8e8;
+  border-radius: 4px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #8c8c8c;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #737373;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:active {
+  background: #595959;
+}
+
+// 兼容 Firefox
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #8c8c8c #e8e8e8;
+}

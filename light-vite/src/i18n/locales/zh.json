@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "home": "首页",
+    "products": "产品",
+    "about": "关于我们",
+    "contact": "联系我们"
+  },
+  "home": {
+    "welcome": "欢迎来到 YEELEN LIGHTING",
+    "discover": "探索我们的优质嵌入式照明产品",
+    "quality": "品质至上",
+    "qualityDesc": "为每个项目提供卓越品质",
+    "innovation": "创新驱动",
+    "innovationDesc": "引领前沿照明解决方案",
+    "gallery": "产品展示",
+    "exploreProducts": "探索产品",
+    "viewDetails": "查看详情",
+    "premiumSolutions": "优质照明解决方案",
+    "learnMore": "了解更多",
+    "scroll": "滚动",
+    "featuredCollection": "精选系列",
+    "magneticTrackSolutions": "探索我们的优质磁吸轨道照明解决方案",
+    "viewCollection": "查看系列",
+    "whyChooseUs": "为什么选择我们",
+    "readyTransform": "准备好改变您的空间了吗？",
+    "exploreCollection": "探索我们的优质照明解决方案系列",
+    "viewAllProducts": "查看所有产品",
+    "stats": {
+      "years": { "number": "10+", "label": "年行业经验" },
+      "projects": { "number": "500+", "label": "完成项目" },
+      "countries": { "number": "50+", "label": "服务国家" },
+      "satisfaction": { "number": "99%", "label": "客户满意度" }
+    }
+  },
+  "products": {
+    "title": "产品中心",
+    "subtitle": "探索我们的嵌入式照明系列",
+    "magneticTrackSpotlights": "磁吸轨道射灯",
+    "magneticTrackBars": "磁吸轨道条",
+    "magneticFloodlights": "磁吸泛光灯",
+    "magneticGrilles": "磁吸格栅灯",
+    "magneticPendantLights": "磁吸吊灯",
+    "magneticFoldingGrilles": "磁吸折叠格栅",
+    "magneticRoundFolding": "磁吸圆折叠"
+  },
+  "productDetail": {
+    "price": "价格",
+    "specifications": "规格参数",
+    "color": "颜色",
+    "size": "尺寸",
+    "power": "功率",
+    "colorTemperature": "色温",
+    "quantity": "数量",
+    "buyNow": "立即购买",
+    "addToCart": "加入购物车",
+    "enlargeImage": "点击查看大图",
+    "closeLightbox": "关闭预览",
+    "previousImage": "上一张",
+    "nextImage": "下一张"
+  },
+  "about": {
+    "title": "关于我们",
+    "subtitle": "了解更多关于 YEELEN LIGHTING",
+    "description": "YEELEN LIGHTING 是领先的优质嵌入式照明制造商。我们专注于将创新、品质和设计相结合的磁吸轨道照明系统。",
+    "mission": "我们的使命",
+    "missionText": "用创新照明解决方案照亮空间，提升生活品质。",
+    "vision": "我们的愿景",
+    "visionText": "成为嵌入式照明创新的全球领导者。",
+    "values": "我们的价值观",
+    "quality": "品质",
+    "qualityDesc": "每件产品都追求卓越品质",
+    "innovation": "创新",
+    "innovationDesc": "持续改进和创新解决方案",
+    "customer": "客户至上",
+    "customerDesc": "您的满意是我们的首要任务",
+    "contact": {
+      "tagline": "专注磁吸照明",
+      "intro": "YEELEN LIGHTING 是领先的优质嵌入式照明制造商，专注于将创新、品质与设计相结合的磁吸轨道照明系统。",
+      "addressLabel": "地址：",
+      "address": "广东省江门市江海区江门市南智能装备制造产业园4号楼2-3楼",
+      "emailLabel": "邮箱：",
+      "email": "info@yeeleenlighting.com",
+      "phoneLabel": "电话：",
+      "phone": "+86-18925346446"
+    },
+    "contactForm": {
+      "openButton": "联系我们",
+      "modalTitle": "联系我们",
+      "banner": "联系我们",
+      "submit": "提交",
+      "submitting": "提交中…",
+      "fields": {
+        "name": "姓名",
+        "email": "邮箱",
+        "country": "国家",
+        "tel": "电话",
+        "whatsapp": "WhatsApp",
+        "company": "公司",
+        "message": "留言"
+      },
+      "toast": {
+        "success": "提交成功，我们会尽快与您联系。",
+        "errorSubmit": "提交失败，请检查信息后重试。",
+        "errorNetwork": "网络异常，请稍后重试。"
+      }
+    }
+  },
+  "footer": {
+    "copyright": "© 2026 YEELEN LIGHTING. 保留所有权利。"
+  },
+  "common": {
+    "products": "产品",
+    "learnMore": "了解更多",
+    "back": "返回"
+  }
+}

@@ -1,0 +1,54 @@
+/* ── Buttons ── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 36px;
+  background: linear-gradient(135deg, #b8924f 0%, #d4b06a 100%);
+  color: #fffaf3;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(180, 140, 70, 0.25);
+  transition: all 0.35s var(--ease);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(180, 140, 70, 0.32);
+}
+
+.btn-primary.invert {
+  background: #fffaf3;
+  color: var(--text);
+  border: 1px solid rgba(255, 250, 243, 0.3);
+  box-shadow: none;
+}
+
+.btn-primary.invert:hover {
+  background: transparent;
+  color: #fffaf3;
+  border-color: rgba(255, 250, 243, 0.5);
+}
+
+.btn-outline {
+  display: inline-flex;
+  padding: 12px 28px;
+  border: 1px solid rgba(196, 162, 101, 0.45);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text);
+  transition: all 0.35s var(--ease);
+}
+
+.btn-outline:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--text);
+}

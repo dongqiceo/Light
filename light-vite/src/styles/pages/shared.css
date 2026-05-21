@@ -1,0 +1,32 @@
+/* ── Page hero (inner pages) ── */
+.page-hero {
+  padding: calc(var(--nav-h) + 64px) 0 0;
+  margin-top: 0;
+  background: linear-gradient(180deg, rgba(255, 252, 248, 0.9), transparent);
+}
+
+.page-hero h1 {
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #1a1612, #6b5f52);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.page-hero p {
+  font-size: 16px;
+  color: var(--text-muted);
+  max-width: 520px;
+}
+
+.page-body {
+  padding: 64px 24px 100px;
+}
+
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}

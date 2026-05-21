@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./service-java
+      dockerfile: Dockerfile
+    image: light-backend:latest
+    ports:
+      - "3001:3001"
+    environment:
+      - LIGHT_DB_PATH=/app/data/light.db
+      - LIGHT_STATIC_PATH=/app/light/public
+      - LIGHT_ASSETS_PATH=/app/light/public/uploads
+      - LIGHT_UPLOAD_DIR=/app/light/public/uploads
+      - LIGHT_UPLOAD_BASE_URL=http://localhost:3001
+    volumes:
+      - ./service-java/light/public:/app/light/public
+      - ./service-java/data:/app/data
+
+  web:
+    build:
+      context: ./light-vite
+      dockerfile: Dockerfile
+    image: light-web:latest
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+  cms:
+    build:
+      context: ./light-cms
+      dockerfile: Dockerfile
+    image: light-cms:latest
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend

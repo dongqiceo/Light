@@ -1,0 +1,13 @@
+@import "./tokens.css";
+@import "./base.css";
+@import "./components/buttons.css";
+@import "./components/logo.css";
+@import "./components/navbar.css";
+@import "./components/footer.css";
+@import "./components/floating-contact.css";
+@import "./pages/shared.css";
+@import "./pages/home.css";
+@import "./pages/products.css";
+@import "./pages/about.css";
+@import "./pages/product-detail.css";
+@import "./responsive.css";

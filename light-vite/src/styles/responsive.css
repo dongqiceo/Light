@@ -1,0 +1,82 @@
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .pillars-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-mosaic {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 32px;
+  }
+
+  .gallery-mosaic .product-card[class*="mosaic-"] {
+    grid-column: span 1;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .detail-info {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-desktop {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .lang-label {
+    display: none;
+  }
+
+  .gallery-mosaic {
+    grid-template-columns: 1fr;
+  }
+
+  .about-values {
+    grid-template-columns: 1fr;
+  }
+
+  .value-card.full {
+    grid-column: auto;
+  }
+
+  .intro-logo {
+    letter-spacing: 0.05em;
+  }
+
+  .intro-subtitle {
+    letter-spacing: 0.1em;
+  }
+
+  .section-pad {
+    padding: 64px 0;
+  }
+
+  .detail-spec-row dt {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    gap: 32px;
+  }
+
+  .category-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}

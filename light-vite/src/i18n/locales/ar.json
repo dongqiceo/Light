@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "products": "المنتجات",
+    "about": "عن الشركة",
+    "contact": "اتصل بنا"
+  },
+  "home": {
+    "welcome": "مرحباً بكم في فيلين لايتنج",
+    "discover": "اكتشف منتجاتنا المميزة للإضاءة المدمجة",
+    "quality": "الجودة أولاً",
+    "qualityDesc": "نقدم التميز في كل مشروع",
+    "innovation": "الابتكار驱动",
+    "innovationDesc": "نقود الطريق بحلول الإضاءة المتقدمة",
+    "gallery": "معرضنا",
+    "exploreProducts": "استكشف المنتجات",
+    "viewDetails": "عرض التفاصيل",
+    "premiumSolutions": "حلول إضاءة متميزة",
+    "learnMore": "اعرف المزيد",
+    "scroll": "تسحب",
+    "featuredCollection": "مجموعة مختارة",
+    "magneticTrackSolutions": "اكتشف حلولنا المتميزة للإضاءة بالمسارات المغناطيسية",
+    "viewCollection": "عرض المجموعة",
+    "whyChooseUs": "لماذا تختارنا",
+    "readyTransform": "هل أنت جاهز لتغيير مساحتك؟",
+    "exploreCollection": "استكشف مجموعة حلول الإضاءة المتميزة لدينا",
+    "viewAllProducts": "عرض جميع المنتجات",
+    "stats": {
+      "years": { "number": "10+", "label": "سنوات من الخبرة" },
+      "projects": { "number": "500+", "label": "مشروع منجز" },
+      "countries": { "number": "50+", "label": "دولة نخدمها" },
+      "satisfaction": { "number": "99%", "label": "رضا العملاء" }
+    }
+  },
+  "products": {
+    "title": "المنتجات",
+    "subtitle": "استكشف مجموعة الإضاءة المدمجة لدينا",
+    "magneticTrackSpotlights": "مصابيح مسارات مغناطيسية",
+    "magneticTrackBars": "قضبان مسارات مغناطيسية",
+    "magneticFloodlights": "مصابيح فيض مغناطيسية",
+    "magneticGrilles": "شبابيك مغناطيسية",
+    "magneticPendantLights": "مصابيح معلقة مغناطيسية",
+    "magneticFoldingGrilles": "شبابيك قابلة للطي مغناطيسية",
+    "magneticRoundFolding": "طي دائري مغناطيسي"
+  },
+  "productDetail": {
+    "price": "السعر",
+    "specifications": "المواصفات",
+    "color": "اللون",
+    "size": "الحجم",
+    "power": "الطاقة",
+    "colorTemperature": "درجة حرارة اللون",
+    "quantity": "الكمية",
+    "buyNow": "اشتر الآن",
+    "addToCart": "أضف إلى السلة",
+    "enlargeImage": "عرض صورة أكبر",
+    "closeLightbox": "إغلاق المعاينة",
+    "previousImage": "الصورة السابقة",
+    "nextImage": "الصورة التالية"
+  },
+  "about": {
+    "title": "عن الشركة",
+    "subtitle": "اعرف المزيد عن فيلين لايتنج",
+    "description": "فيلين لايتنج هي شركة رائدة في تصنيع حلول الإضاءة المدمجة عالية الجودة. نحن متخصصون في أنظمة الإضاءة بالمسارات المغناطيسية التي تجمع بين الابتكار والجودة والتصميم.",
+    "mission": "رسالتنا",
+    "missionText": "إضاءة المساحات بحلول مبتكرة تعزز جودة الحياة.",
+    "vision": "رؤيتنا",
+    "visionText": "أن نكون قائداً عالمياً في ابتكار الإضاءة المدمجة.",
+    "values": "قيمنا",
+    "quality": "الجودة",
+    "qualityDesc": "التميز غير المشروط في كل منتج",
+    "innovation": "الابتكار",
+    "innovationDesc": "التحسين المستمر والحلول الإبداعية",
+    "customer": "تركيز على العميل",
+    "customerDesc": "رضاكم هو أولويتنا",
+    "contact": {
+      "tagline": "متخصصون في الإضاءة المغناطيسية",
+      "intro": "فيلين لايتنج شركة رائدة في تصنيع حلول الإضاءة المدمجة عالية الجودة، متخصصة في أنظمة الإضاءة بالمسارات المغناطيسية التي تجمع بين الابتكار والجودة والتصميم.",
+      "addressLabel": "العنوان:",
+      "address": "الطابق 2-3، مبنى 4، حديقة جيانغمن الجنوبية للتصنيع الذكي، منطقة جيانهاي، جيانغمن، قوانغدونغ، الصين",
+      "emailLabel": "البريد الإلكتروني:",
+      "email": "info@yeeleenlighting.com",
+      "phoneLabel": "الهاتف:",
+      "phone": "+86-18925346446"
+    },
+    "contactForm": {
+      "openButton": "اتصل بنا",
+      "modalTitle": "اتصل بنا",
+      "banner": "اتصل بنا",
+      "submit": "إرسال",
+      "submitting": "جارٍ الإرسال…",
+      "fields": {
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "country": "الدولة",
+        "tel": "الهاتف",
+        "whatsapp": "واتساب",
+        "company": "الشركة",
+        "message": "الرسالة"
+      },
+      "toast": {
+        "success": "شكراً لك! سنتواصل معك قريباً.",
+        "errorSubmit": "فشل الإرسال. يرجى التحقق من البيانات والمحاولة مرة أخرى.",
+        "errorNetwork": "خطأ في الشبكة. يرجى المحاولة لاحقاً."
+      }
+    }
+  },
+  "footer": {
+    "copyright": "© 2026 فيلين لايتنج. جميع الحقوق محفوظة."
+  },
+  "common": {
+    "products": "المنتجات",
+    "learnMore": "اعرف المزيد",
+    "back": "رجوع"
+  }
+}

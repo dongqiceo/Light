@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "about": "About Us",
+    "contact": "Contact"
+  },
+  "home": {
+    "welcome": "Welcome to YEELEN LIGHTING",
+    "discover": "Discover our amazing recessed lighting products",
+    "quality": "Quality First",
+    "qualityDesc": "We deliver excellence in every project",
+    "innovation": "Innovation Driven",
+    "innovationDesc": "Leading the way with cutting-edge lighting solutions",
+    "gallery": "Our Gallery",
+    "exploreProducts": "Explore Products",
+    "viewDetails": "View Details",
+    "premiumSolutions": "Premium Lighting Solutions",
+    "learnMore": "Learn More",
+    "scroll": "Scroll",
+    "featuredCollection": "Featured Collection",
+    "magneticTrackSolutions": "Discover our premium magnetic track lighting solutions",
+    "viewCollection": "View Collection",
+    "whyChooseUs": "Why Choose Us",
+    "readyTransform": "Ready to Transform Your Space?",
+    "exploreCollection": "Explore our collection of premium lighting solutions",
+    "viewAllProducts": "View All Products",
+    "stats": {
+      "years": { "number": "10+", "label": "Years Experience" },
+      "projects": { "number": "500+", "label": "Projects Completed" },
+      "countries": { "number": "50+", "label": "Countries Served" },
+      "satisfaction": { "number": "99%", "label": "Customer Satisfaction" }
+    }
+  },
+  "products": {
+    "title": "Products",
+    "subtitle": "Explore our recessed lighting series",
+    "magneticTrackSpotlights": "Magnetic Track Spotlights",
+    "magneticTrackBars": "Magnetic Track Bars",
+    "magneticFloodlights": "Magnetic Floodlights",
+    "magneticGrilles": "Magnetic Grilles",
+    "magneticPendantLights": "Magnetic Pendant Lights",
+    "magneticFoldingGrilles": "Magnetic Folding Grilles",
+    "magneticRoundFolding": "Magnetic Round Folding"
+  },
+  "productDetail": {
+    "price": "Price",
+    "specifications": "Specifications",
+    "color": "Color",
+    "size": "Size",
+    "power": "Power",
+    "colorTemperature": "Color Temperature",
+    "quantity": "Quantity",
+    "buyNow": "Buy Now",
+    "addToCart": "Add to Cart",
+    "enlargeImage": "View larger image",
+    "closeLightbox": "Close preview",
+    "previousImage": "Previous image",
+    "nextImage": "Next image"
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "Learn more about YEELEN LIGHTING",
+    "description": "YEELEN LIGHTING is a leading manufacturer of high-quality recessed lighting solutions. We specialize in magnetic track lighting systems that combine innovation, quality, and design.",
+    "mission": "Our Mission",
+    "missionText": "To illuminate spaces with innovative lighting solutions that enhance quality of life.",
+    "vision": "Our Vision",
+    "visionText": "To be the global leader in recessed lighting innovation.",
+    "values": "Our Values",
+    "quality": "Quality",
+    "qualityDesc": "Uncompromising excellence in every product",
+    "innovation": "Innovation",
+    "innovationDesc": "Continuous improvement and creative solutions",
+    "customer": "Customer Focus",
+    "customerDesc": "Your satisfaction is our priority",
+    "contact": {
+      "tagline": "Specialized In Magnetic Lighting",
+      "intro": "YEELEN LIGHTING is a leading manufacturer of high-quality recessed lighting solutions. We specialize in magnetic track lighting systems that combine innovation, quality, and design.",
+      "addressLabel": "Address:",
+      "address": "2nd-3rd Floor, Building No.4, Jiangmen South Intelligent Manufacturing Industrial Park, Jianghai District, Jiangmen City, Guangdong, China",
+      "emailLabel": "E-Mail:",
+      "email": "info@yeeleenlighting.com",
+      "phoneLabel": "Phone:",
+      "phone": "+86-18925346446"
+    },
+    "contactForm": {
+      "openButton": "Contact Us",
+      "modalTitle": "Contact US",
+      "banner": "Contact Us",
+      "submit": "submit",
+      "submitting": "Submitting…",
+      "fields": {
+        "name": "Name",
+        "email": "Email",
+        "country": "Country",
+        "tel": "Tel",
+        "whatsapp": "WhatsApp",
+        "company": "Company",
+        "message": "Message"
+      },
+      "toast": {
+        "success": "Thank you! We will get back to you soon.",
+        "errorSubmit": "Submission failed. Please check your details and try again.",
+        "errorNetwork": "Network error. Please try again later."
+      }
+    }
+  },
+  "footer": {
+    "copyright": "© 2026 YEELEN LIGHTING. All rights reserved."
+  },
+  "common": {
+    "products": "Products",
+    "learnMore": "Learn More",
+    "back": "Back"
+  }
+}
