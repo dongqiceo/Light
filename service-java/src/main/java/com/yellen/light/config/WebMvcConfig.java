@@ -18,9 +18,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    // 不拦截登录接口
+    // 仅拦截 CMS 和后台登录保护接口，不拦截公开 H5 API
     registry.addInterceptor(authInterceptor)
-        .addPathPatterns("/light-cms/**", "/api/**")
+        .addPathPatterns("/light-cms/**", "/api/v1/**")
         .excludePathPatterns("/api/v1/login", "/api/v1/logout", "/health");
   }
 
