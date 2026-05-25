@@ -12,3 +12,4 @@
 **/.mfsu
 **/.swc
 service-java/target
+service-java/data/light.db
