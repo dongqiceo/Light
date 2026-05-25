@@ -8,7 +8,7 @@
   {
     "code": 100000,
     "data": {},
-    "msg": "操作成功"
+    "msg": "success"
   }
   ```
 
@@ -187,7 +187,7 @@ POST /V1/category/delete?id=1
 ```json
 {
   "code": 100000,
-  "msg": "操作成功"
+  "msg": "success"
 }
 ```
 
@@ -225,7 +225,7 @@ POST /V1/category/delete?id=1
 ```json
 {
   "code": 100000,
-  "msg": "操作成功"
+  "msg": "success"
 }
 ```
 
@@ -379,7 +379,7 @@ POST /V1/product/delete?id=1
 ```json
 {
   "code": 100000,
-  "msg": "操作成功"
+  "msg": "success"
 }
 ```
 

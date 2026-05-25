@@ -8,7 +8,7 @@ public final class ApiJson {
   private ApiJson() {}
 
   public static Map<String, Object> cmsOk(Object data) {
-    return cmsOk(data, "操作成功");
+    return cmsOk(data, "success");
   }
 
   public static Map<String, Object> cmsOk(Object data, String message) {
@@ -32,7 +32,7 @@ public final class ApiJson {
   }
 
   public static Map<String, Object> h5Ok(Object data) {
-    return h5Ok(data, "操作成功");
+    return h5Ok(data, "success");
   }
 
   public static Map<String, Object> h5Ok(Object data, String message) {

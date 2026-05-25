@@ -21,7 +21,12 @@ export default defineConfig({
     title: 'YELLEN LIGHTING',
   },
   favicons: ['/logo.png'],
+  mock: false,
   proxy: {
+    '/api': {
+      target: 'http://localhost:3001',
+      changeOrigin: true,
+    },
     '/light-cms': {
       target: 'http://localhost:3001',
       changeOrigin: true,

@@ -6,26 +6,28 @@
 
 ## 一、通用说明
 
-| 项目 | 说明 |
-|------|------|
-| CMS 基础路径 | 建议 `/light-cms` 或 `/api/cms` |
-| H5 基础路径 | `/api`（见 light 项目 `API.md`） |
-| 数据格式 | JSON |
-| 编码 | UTF-8 |
-| 请求头 | `Content-Type: application/json` |
+| 项目         | 说明                             |
+| ------------ | -------------------------------- |
+| CMS 基础路径 | 建议 `/light-cms` 或 `/api/cms`  |
+| H5 基础路径  | `/api`（见 light 项目 `API.md`） |
+| 数据格式     | JSON                             |
+| 编码         | UTF-8                            |
+| 请求头       | `Content-Type: application/json` |
 
 ### 通用响应结构
 
 **成功：**
+
 ```json
 {
   "code": 100000,
-  "message": "操作成功",
-  "data": { }
+  "message": "success",
+  "data": {}
 }
 ```
 
 **失败：**
+
 ```json
 {
   "code": 100001,
@@ -40,7 +42,7 @@
 {
   "code": 100000,
   "data": {
-    "content": [ ],
+    "content": [],
     "number": 0,
     "size": 10,
     "total": 100
@@ -62,7 +64,7 @@
 ### 2.1 分类管理（对应 H5 产品分类 + 产品详情）
 
 | 方法 | 路径 | 说明 |
-|------|------|------|
+| --- | --- | --- |
 | POST | `/light-cms/category/list` | 分页查询，body 含 `page`, `pageSize`, `name`, `status` 等 |
 | GET | `/light-cms/category/listAll` | 全部分类（不分页），用于下拉等 |
 | POST | `/light-cms/category/save` | 新增/更新 |
@@ -72,7 +74,7 @@
 **保存/列表单条数据结构：**
 
 | 字段 | 类型 | 必填 | 说明 |
-|------|------|------|------|
+| --- | --- | --- | --- |
 | id | number | 更新时 | 主键 |
 | name | string | 是 | 分类名称（中文/内部），如「磁吸轨道射灯」 |
 | nameEn | string | 否 | 英文名称，如 Magnetic Track Spotlights |
@@ -86,13 +88,13 @@
 
 ### 2.2 产品管理（单品，可用于精选等）
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| POST | `/light-cms/product/list` | 分页查询 |
-| GET | `/light-cms/product/listAll` | 全部 |
-| POST | `/light-cms/product/save` | 新增/更新 |
-| POST | `/light-cms/product/delete?id=xxx` | 删除 |
-| POST | `/light-cms/product/updateStatus` | 更新状态 |
+| 方法 | 路径                               | 说明      |
+| ---- | ---------------------------------- | --------- |
+| POST | `/light-cms/product/list`          | 分页查询  |
+| GET  | `/light-cms/product/listAll`       | 全部      |
+| POST | `/light-cms/product/save`          | 新增/更新 |
+| POST | `/light-cms/product/delete?id=xxx` | 删除      |
+| POST | `/light-cms/product/updateStatus`  | 更新状态  |
 
 **单条数据结构：** id, categoryId, name, image, description, priority, status 等。
 
@@ -100,12 +102,12 @@
 
 ### 2.3 轮播图管理
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| POST | `/light-cms/carousel/list` | 分页查询 |
-| POST | `/light-cms/carousel/save` | 新增/更新 |
-| POST | `/light-cms/carousel/delete?id=xxx` | 删除 |
-| POST | `/light-cms/carousel/updateStatus` | 更新状态 |
+| 方法 | 路径                                | 说明      |
+| ---- | ----------------------------------- | --------- |
+| POST | `/light-cms/carousel/list`          | 分页查询  |
+| POST | `/light-cms/carousel/save`          | 新增/更新 |
+| POST | `/light-cms/carousel/delete?id=xxx` | 删除      |
+| POST | `/light-cms/carousel/updateStatus`  | 更新状态  |
 
 **单条数据结构：** id, title, description, image, link, priority, status。
 
@@ -113,16 +115,16 @@
 
 ### 2.4 精选产品管理
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| POST | `/light-cms/featured/list` | 分页查询 |
-| POST | `/light-cms/featured/save` | 新增/更新 |
-| POST | `/light-cms/featured/delete?id=xxx` | 删除 |
+| 方法 | 路径                                | 说明      |
+| ---- | ----------------------------------- | --------- |
+| POST | `/light-cms/featured/list`          | 分页查询  |
+| POST | `/light-cms/featured/save`          | 新增/更新 |
+| POST | `/light-cms/featured/delete?id=xxx` | 删除      |
 
 **单条数据结构（与 H5 首页精选区块一致）：**
 
 | 字段 | 类型 | 必填 | 说明 |
-|------|------|------|------|
+| --- | --- | --- | --- |
 | id | number | 更新时 | 主键 |
 | name | string | 是 | 名称或 i18n key，如 products.magneticTrackSpotlights |
 | desc | string | 否 | 简短描述 |
@@ -134,10 +136,10 @@
 
 ### 2.5 网站设置
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/light-cms/settings` | 获取站点配置（单条） |
-| POST | `/light-cms/settings/save` | 保存 |
+| 方法 | 路径                       | 说明                 |
+| ---- | -------------------------- | -------------------- |
+| GET  | `/light-cms/settings`      | 获取站点配置（单条） |
+| POST | `/light-cms/settings/save` | 保存                 |
 
 **数据结构：** siteName, siteTitle, siteDescription, contactEmail, contactPhone, address, facebook, instagram, twitter 等。
 
@@ -150,34 +152,34 @@ H5 页面使用的接口定义见 **light 项目根目录 `API.md`**。此处仅
 ### 3.1 首页
 
 | H5 接口 | 数据来源 | 说明 |
-|---------|----------|------|
+| --- | --- | --- |
 | GET /api/products/featured?limit=6 | CMS 精选产品表，按 priority 排序取前 limit 条，只返回 id, name, desc, image, category | 首页精选区块 |
 | GET /api/carousels | CMS 轮播图表，status=1，按 priority 排序，返回 [{ id, title, description, image, link }] | 首页轮播（若使用） |
 
 ### 3.2 产品
 
 | H5 接口 | 数据来源 | 说明 |
-|---------|----------|------|
+| --- | --- | --- |
 | GET /api/product-categories | CMS 分类表，status=1，按 priority 排序，返回 id, name, displayNameKey, folderName, images | 产品页分类与图片网格 |
 | GET /api/products/:categoryId | CMS 分类表 id=categoryId 的单条，返回 id, name, displayNameKey, folderName, images, price?, specifications? | 产品详情页 |
 
 ### 3.3 关于 / 联系 / 通用
 
-| H5 接口 | 数据来源 |
-|---------|----------|
-| GET /api/about | 关于我们配置或 i18n |
-| GET /api/company-info | 公司信息配置 |
-| GET /api/team-members | 团队成员表 |
-| POST /api/contact | 联系表单提交 |
-| GET /api/settings | CMS 网站设置 |
-| GET /api/translations?locale=xx | 多语言文案 |
+| H5 接口                         | 数据来源            |
+| ------------------------------- | ------------------- |
+| GET /api/about                  | 关于我们配置或 i18n |
+| GET /api/company-info           | 公司信息配置        |
+| GET /api/team-members           | 团队成员表          |
+| POST /api/contact               | 联系表单提交        |
+| GET /api/settings               | CMS 网站设置        |
+| GET /api/translations?locale=xx | 多语言文案          |
 
 ---
 
 ## 四、字段对照速查
 
 | H5 页面/接口 | CMS 模块 | 关键字段对应 |
-|--------------|----------|----------------|
+| --- | --- | --- |
 | Home 精选 | 精选产品 | name, desc, image, category |
 | Home 轮播 | 轮播图 | title, description, image, link |
 | Products 分类列表 | 分类管理 | id, name, displayNameKey, folderName, images |
@@ -187,15 +189,16 @@ H5 页面使用的接口定义见 **light 项目根目录 `API.md`**。此处仅
 
 ## 五、错误码建议
 
-| 错误码 | 说明 |
-|--------|------|
-| 100000 | 成功 |
-| 100001 | 通用错误 |
-| 100002 | 参数错误 |
+| 错误码 | 说明       |
+| ------ | ---------- |
+| 100000 | 成功       |
+| 100001 | 通用错误   |
+| 100002 | 参数错误   |
 | 100006 | 资源不存在 |
 
 ---
 
-后端实现时：  
-- CMS 管理接口按第二节路径与 body 实现即可与 light-cms 前端联调。  
+后端实现时：
+
+- CMS 管理接口按第二节路径与 body 实现即可与 light-cms 前端联调。
 - H5 接口按 light/API.md 的路径与响应格式实现，数据从上述 CMS 表/配置中查询并组装。

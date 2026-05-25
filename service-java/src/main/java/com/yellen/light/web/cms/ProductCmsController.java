@@ -1,22 +1,24 @@
 package com.yellen.light.web.cms;
 
-import static com.yellen.light.util.ApiJson.*;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yellen.light.util.ApiJson;
-import com.yellen.light.util.DbTime;
-import com.yellen.light.util.I18nUtils;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yellen.light.util.ApiJson;
+import static com.yellen.light.util.ApiJson.cmsErr;
+import static com.yellen.light.util.ApiJson.cmsOk;
+import com.yellen.light.util.DbTime;
+import com.yellen.light.util.I18nUtils;
 
 @RestController
 @RequestMapping("/light-cms/product")
@@ -213,7 +215,7 @@ public class ProductCmsController {
     }
     int status = body.get("status").asInt();
     jdbc.update("UPDATE products SET status = ?, updateTime = ? WHERE id = ?", status, DbTime.now(), id);
-    return cmsOk(null, "操作成功");
+    return cmsOk(null, "success");
   }
 
   private static Object parseSpecs(Object raw) throws Exception {

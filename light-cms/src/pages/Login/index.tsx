@@ -30,11 +30,11 @@ const LoginPage: React.FC = () => {
         message.success('登录成功');
         navigate('/welcome');
       } else {
-        message.error(response.data.message || '登录失败');
+        message.error(response.message || '登录失败');
       }
-    } catch (error) {
-      console.log(error);
-      message.error('登录失败，请重试');
+    } catch (error: any) {
+      const apiMessage = error?.data?.message ?? error?.response?.data?.message;
+      message.error(apiMessage || '登录失败，请重试');
     } finally {
       setLoading(false);
     }
