@@ -122,7 +122,7 @@ public class CarouselCmsController {
     }
     int status = body.get("status").asInt();
     jdbc.update("UPDATE carousels SET status = ?, updateTime = ? WHERE id = ?", status, DbTime.now(), id);
-    return cmsOk(null, "操作成功");
+    return cmsOk(null, "success");
   }
 
   private static String text(JsonNode body, String field) {

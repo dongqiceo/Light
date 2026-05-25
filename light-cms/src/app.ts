@@ -73,12 +73,15 @@ export const request = {
   responseInterceptors: [
     (response) => {
       const { code, message: msg } = response.data;
-      if (code === 401) {
-        // token 过期或无效
+      const url = response.config?.url || '';
+      const isLoginRequest = url.includes('/api/v1/login');
+
+      if (code === 401 && !isLoginRequest) {
+        // token 过期或无效（登录失败由登录页展示后端 message）
         localStorage.removeItem('token');
         history.replace('/login');
-        message.error('登录已过期，请重新登录');
-      } else if (code !== 100000) {
+        message.error(msg || '登录已过期，请重新登录');
+      } else if (code !== 100000 && !isLoginRequest) {
         message.error(msg || '操作失败');
       }
       return response;
