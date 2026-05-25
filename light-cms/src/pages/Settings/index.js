@@ -58,8 +58,27 @@ const Index = () => {
   const handleSave = () => {
     const languageData = languageTabRef.current?.getData() || {};
     form.validateFields().then((values) => {
+      // 用英语内容自动填充其他语言缺失字段
+      const filledLanguageData = { ...languageData };
+      const enData = filledLanguageData['en'] || {};
+      const langCodes = languageList?.map(l => l.code) || [];
+      
+      langCodes.forEach(code => {
+        if (code !== 'en' && enData) {
+          if (!filledLanguageData[code]) {
+            filledLanguageData[code] = {};
+          }
+          // 对每个字段，如果缺失则用英语填充
+          ABOUT_FIELDS.forEach(field => {
+            if (!filledLanguageData[code][field.name] && enData[field.name]) {
+              filledLanguageData[code][field.name] = enData[field.name];
+            }
+          });
+        }
+      });
+      
       const params = {
-        ...languageData,
+        ...filledLanguageData,
         contactEmail: values.contactEmail,
         contactPhone: values.contactPhone,
         address: values.address,

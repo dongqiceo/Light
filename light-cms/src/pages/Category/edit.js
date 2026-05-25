@@ -45,9 +45,27 @@ const Edit = ({ record, title, view, copy, onSuccess, languageList, children }) 
         key => !langCodes.some(code => key === `${code}_name` || key.startsWith(`${code}_`))
       );
       const sharedFields = sharedKeys.reduce((acc, k) => ({ ...acc, [k]: values[k] }), {});
+      
+      // 用英语内容自动填充其他语言缺失字段
+      const filledLanguageData = { ...languageData };
+      const enData = filledLanguageData['en'] || {};
+      langCodes.forEach(code => {
+        if (code !== 'en' && enData) {
+          if (!filledLanguageData[code]) {
+            filledLanguageData[code] = {};
+          }
+          // 对每个字段，如果缺失则用英语填充
+          fields?.forEach(field => {
+            if (!filledLanguageData[code][field.name] && enData[field.name]) {
+              filledLanguageData[code][field.name] = enData[field.name];
+            }
+          });
+        }
+      });
+      
       const params = {
         ...sharedFields,
-        ...languageData,
+        ...filledLanguageData,
         id: copy ? undefined : record?.id,
       };
       setLoading(true);
