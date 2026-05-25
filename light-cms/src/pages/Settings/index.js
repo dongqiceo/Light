@@ -103,7 +103,7 @@ const Index = () => {
             { type: 'email', message: '邮箱格式不正确' },
           ]}
         >
-          <Input allowClear placeholder="info@yeeleenlighting.com" />
+          <Input allowClear placeholder="yeelen_magnetic@outlook.com" />
         </Item>
 
         <Item
@@ -111,7 +111,7 @@ const Index = () => {
           name="contactPhone"
           rules={[{ required: true, message: '请输入电话' }]}
         >
-          <Input allowClear placeholder="+86-18925346446" />
+          <Input allowClear placeholder="+86-15270820556" />
         </Item>
 
         <Item>
