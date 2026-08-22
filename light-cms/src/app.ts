@@ -59,6 +59,12 @@ export const layout = () => {
   };
 };
 
+function notifyUnauthorized(msg?: string) {
+  localStorage.removeItem('token');
+  message.error(msg || '登录已过期，请重新登录');
+  history.replace('/login');
+}
+
 export const request = {
   requestInterceptors: [
     (config) => {
@@ -70,17 +76,30 @@ export const request = {
       return config;
     },
   ],
+  // 后端 AuthInterceptor 会把 HTTP status 设为 401，axios 走错误分支，不会进 responseInterceptors
+  errorConfig: {
+    errorHandler(error: any) {
+      const url = error?.config?.url || '';
+      if (url.includes('/api/v1/login')) {
+        return;
+      }
+      const status = error?.response?.status;
+      const data = error?.response?.data;
+      if (status === 401 || data?.code === 401) {
+        notifyUnauthorized(data?.message);
+        return;
+      }
+      message.error(data?.message || error?.message || '请求失败');
+    },
+  },
   responseInterceptors: [
     (response) => {
-      const { code, message: msg } = response.data;
+      const { code, message: msg } = response.data || {};
       const url = response.config?.url || '';
       const isLoginRequest = url.includes('/api/v1/login');
 
       if (code === 401 && !isLoginRequest) {
-        // token 过期或无效（登录失败由登录页展示后端 message）
-        localStorage.removeItem('token');
-        history.replace('/login');
-        message.error(msg || '登录已过期，请重新登录');
+        notifyUnauthorized(msg);
       } else if (code !== 100000 && !isLoginRequest) {
         message.error(msg || '操作失败');
       }

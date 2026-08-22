@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Upload, Image } from 'antd';
 import { PlusOutlined, HolderOutlined } from '@ant-design/icons';
+import { request } from '@umijs/max';
 import { resolveImageUrl } from '@/utils/resolveImageUrl';
 
 /**
@@ -30,22 +31,26 @@ const ImageUpload = ({ value, onChange, uploadUrl = '/light-cms/upload', maxCoun
     else onChange?.(next);
   };
 
-  const handleUpload = ({ file, onSuccess: onUploadSuccess, onError }) => {
+  const handleUpload = async ({ file, onSuccess: onUploadSuccess, onError }) => {
     const formData = new FormData();
     formData.append('file', file);
-    fetch(uploadUrl, { method: 'POST', body: formData })
-      .then((res) => res.json())
-      .then((data) => {
-        const url = data.data?.url ?? data.url;
-        if (data.code === 100000 && url) {
-          const next = [...urlsRef.current, url];
-          emit(next);
-          onUploadSuccess({ url });
-        } else {
-          onError(new Error(data.message || '上传失败'));
-        }
-      })
-      .catch(onError);
+    try {
+      // 走 umi request，才能进 app.ts 的 token / 401 统一拦截
+      const data = await request(uploadUrl, {
+        method: 'POST',
+        data: formData,
+      });
+      const url = data?.data?.url ?? data?.url;
+      if (data?.code === 100000 && url) {
+        const next = [...urlsRef.current, url];
+        emit(next);
+        onUploadSuccess({ url });
+        return;
+      }
+      onError(new Error(data?.message || '上传失败'));
+    } catch (err) {
+      onError(err);
+    }
   };
 
   const handleRemove = (index) => {
