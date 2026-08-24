@@ -1,13 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import { joinSpec } from '../../utils/product';
+import { formatLocalePrice } from '../../utils/formatLocalePrice';
 
-export default function DetailSpecs({ name, description, price, specs }) {
-  const { t } = useTranslation();
+export default function DetailSpecs({ name, description, price, priceStatus, specs }) {
+  const { t, i18n } = useTranslation();
 
   const tf = (key, fallback) => {
     const text = t(key);
     return text === key ? fallback : text;
   };
+
+  const lang = (i18n.language || 'en').slice(0, 2);
+  const formattedPrice =
+    priceStatus === 'ready' ? formatLocalePrice(price, lang) : null;
+  const priceText = formattedPrice || '—';
 
   return (
     <aside className="detail-info">
@@ -17,7 +23,7 @@ export default function DetailSpecs({ name, description, price, specs }) {
 
       <div className="detail-price">
         <span>{tf('productDetail.price', 'Price')}</span>
-        <strong>¥{price}</strong>
+        <strong>{priceText}</strong>
       </div>
 
       <div className="detail-specs">
@@ -25,14 +31,7 @@ export default function DetailSpecs({ name, description, price, specs }) {
         <dl>
           <div className="detail-spec-row">
             <dt>{tf('productDetail.color', 'Color')}</dt>
-            <dd>
-              <div className="color-dots">
-                {specs.colors.map((c) => (
-                  <span key={c.value} style={{ background: c.hex }} title={c.name} />
-                ))}
-              </div>
-              {joinSpec(specs.colors)}
-            </dd>
+            <dd>{joinSpec(specs.colors)}</dd>
           </div>
           <div className="detail-spec-row">
             <dt>{tf('productDetail.size', 'Size')}</dt>

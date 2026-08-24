@@ -19,6 +19,7 @@ import static com.yellen.light.util.ApiJson.cmsErr;
 import static com.yellen.light.util.ApiJson.cmsOk;
 import com.yellen.light.util.DbTime;
 import com.yellen.light.util.I18nUtils;
+import com.yellen.light.util.ProductPrices;
 
 @RestController
 @RequestMapping("/light-cms/product")
@@ -92,11 +93,12 @@ public class ProductCmsController {
     for (Map<String, Object> row : rows) {
       Map<String, Object> copy = new LinkedHashMap<>(row);
       Object catI18n = copy.remove("categoryName_i18n");
-      Map<String, Object> rec = I18nUtils.rowToI18nRecord(copy, "name", "description");
+      Map<String, Object> rec = I18nUtils.rowToI18nRecord(copy, "name", "description", "price");
       rec.put("images", I18nUtils.parseImages(String.valueOf(row.getOrDefault("images", "[]"))));
       rec.put("name", I18nUtils.getPrimaryFromRow(row, "name"));
       rec.put("description", I18nUtils.getPrimaryFromRow(row, "description"));
       rec.put("categoryName", categoryDisplayName(catI18n == null ? null : catI18n.toString()));
+      ProductPrices.overlayListPrice(rec, row.get("price_i18n"));
       content.add(rec);
     }
     return ApiJson.paginated(content, page, pageSize, total);
@@ -107,11 +109,12 @@ public class ProductCmsController {
     List<Map<String, Object>> rows = jdbc.queryForList("SELECT * FROM products ORDER BY priority ASC, id ASC");
     List<Map<String, Object>> products = new ArrayList<>();
     for (Map<String, Object> row : rows) {
-      Map<String, Object> rec = I18nUtils.rowToI18nRecord(new LinkedHashMap<>(row), "name", "description");
+      Map<String, Object> rec = I18nUtils.rowToI18nRecord(new LinkedHashMap<>(row), "name", "description", "price");
       rec.put("images", I18nUtils.parseImages(String.valueOf(row.getOrDefault("images", "[]"))));
       rec.put("name", I18nUtils.getPrimaryFromRow(row, "name"));
       rec.put("description", I18nUtils.getPrimaryFromRow(row, "description"));
       rec.put("specs", parseSpecs(row.get("specs")));
+      ProductPrices.overlayListPrice(rec, row.get("price_i18n"));
       products.add(rec);
     }
     return cmsOk(products);
@@ -128,9 +131,10 @@ public class ProductCmsController {
       return cmsErr("产品不存在", 100002);
     }
     Map<String, Object> row = rows.get(0);
-    Map<String, Object> rec = I18nUtils.rowToI18nRecord(new LinkedHashMap<>(row), "name", "description");
+    Map<String, Object> rec = I18nUtils.rowToI18nRecord(new LinkedHashMap<>(row), "name", "description", "price");
     rec.put("images", I18nUtils.parseImages(String.valueOf(row.getOrDefault("images", "[]"))));
     rec.put("specs", parseSpecs(row.get("specs")));
+    ProductPrices.overlayListPrice(rec, row.get("price_i18n"));
     return cmsOk(rec);
   }
 
@@ -165,16 +169,24 @@ public class ProductCmsController {
     String now = DbTime.now();
     int priority = body.path("priority").asInt(0);
     int status = body.has("status") && !body.get("status").isNull() ? body.get("status").asInt() : 1;
-    double price = body.path("price").asDouble(0);
+    Map<String, String> prices;
+    try {
+      prices = ProductPrices.requiredFromBody(body);
+    } catch (IllegalArgumentException e) {
+      return cmsErr(e.getMessage(), 100002);
+    }
+    String priceI18n = ProductPrices.toJson(prices);
+    Double compatiblePrice = ProductPrices.compatibleRealOrNull(prices.get("zh"));
     Long id = longOrNull(body, "id");
     if (id != null) {
       jdbc.update(
-          "UPDATE products SET categoryId = ?, name_i18n = ?, description_i18n = ?, images = ?, price = ?, specs = ?, priority = ?, status = ?, updateTime = ? WHERE id = ?",
+          "UPDATE products SET categoryId = ?, name_i18n = ?, description_i18n = ?, images = ?, price = ?, price_i18n = ?, specs = ?, priority = ?, status = ?, updateTime = ? WHERE id = ?",
           categoryId,
           nameI18n,
           descriptionI18n,
           imagesStr,
-          price,
+          compatiblePrice,
+          priceI18n,
           specsJson,
           priority,
           status,
@@ -182,12 +194,13 @@ public class ProductCmsController {
           id);
     } else {
       jdbc.update(
-          "INSERT INTO products (categoryId, name_i18n, description_i18n, images, price, specs, priority, status, createTime, updateTime) VALUES (?,?,?,?,?,?,?,?,?,?)",
+          "INSERT INTO products (categoryId, name_i18n, description_i18n, images, price, price_i18n, specs, priority, status, createTime, updateTime) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
           categoryId,
           nameI18n,
           descriptionI18n,
           imagesStr,
-          price,
+          compatiblePrice,
+          priceI18n,
           specsJson,
           priority,
           status,

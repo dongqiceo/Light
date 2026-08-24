@@ -79,17 +79,11 @@
 .intro-subtitle-letter {
   display: inline-block;
   opacity: 0;
-}
-
-.intro-letter {
-  background: linear-gradient(135deg, #1a1612 20%, #5c4d38 55%, #c4a265 100%);
+  background-image: linear-gradient(90deg, #d21308 0%, #da2f0b 42%, #e87c15 68%, #f3a01a 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-
-.intro-subtitle-letter {
-  color: var(--accent);
+  -webkit-text-fill-color: transparent;
 }
 
 .intro-done .intro-letter,

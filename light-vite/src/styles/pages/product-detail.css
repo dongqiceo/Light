@@ -355,16 +355,4 @@
   margin: 0;
 }
 
-.color-dots {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 6px;
-}
-
-.color-dots span {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-}
 

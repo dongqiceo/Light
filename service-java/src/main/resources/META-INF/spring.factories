@@ -1,2 +1,3 @@
 org.springframework.context.ApplicationContextInitializer=\
-com.yellen.light.config.SqlitePathInitializer
+com.yellen.light.config.SqlitePathInitializer,\
+com.yellen.light.config.ProductPriceSchemaInitializer

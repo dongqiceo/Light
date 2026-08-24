@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getProductDetail } from '../services';
-import { mockProductCategories } from '../services/mockData';
 
 export const DEFAULT_SPECS = {
   colors: [
-    { name: 'Black', value: 'black', hex: '#1a1a1a' },
-    { name: 'White', value: 'white', hex: '#ffffff' },
+    { name: 'Black', value: 'black' },
+    { name: 'White', value: 'white' },
   ],
   sizes: [
     { label: '30cm', value: '30cm' },
@@ -27,7 +26,6 @@ function mapSpecsFromApi(s) {
     colors: (s.colors || []).map((c) => ({
       name: c.name || c.value,
       value: c.value || c.name,
-      hex: c.hex || '#999',
     })),
     sizes: (s.sizes || []).map((sz) => ({
       label: sz.label ?? sz.value,
@@ -41,19 +39,13 @@ function mapSpecsFromApi(s) {
   };
 }
 
-function applyMockCategory(category, t, imgIndex, setters) {
-  setters.setName(category.displayNameKey ? t(category.displayNameKey) : category.name);
-  setters.setImages(category.images || []);
-  setters.setFolderName(category.folderName || '磁吸轨道射灯');
-  setters.setCurrentIndex(imgIndex);
-}
-
 export function useProductDetail(categoryId, imageIndex, byIndex) {
   const { t, i18n } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState(null);
+  const [priceStatus, setPriceStatus] = useState('idle');
   const [folderName, setFolderName] = useState('磁吸轨道射灯');
   const [images, setImages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -68,10 +60,11 @@ export function useProductDetail(categoryId, imageIndex, byIndex) {
     if (!catId) return undefined;
 
     let cancelled = false;
-    const mockSetters = { setName, setImages, setFolderName, setCurrentIndex };
 
     const load = async () => {
       setLoading(true);
+      setPrice(null);
+      setPriceStatus('loading');
       try {
         const res = await getProductDetail(catId, productId);
         if (cancelled) return;
@@ -85,19 +78,23 @@ export function useProductDetail(categoryId, imageIndex, byIndex) {
           );
           setImages(Array.isArray(d.images) ? d.images : []);
           setFolderName(d.folderName || '磁吸轨道射灯');
-          setPrice(d.price ?? 0);
+          if (typeof d.price === 'string' && /^(0|[1-9]\d*)\.\d{2}$/.test(d.price)) {
+            setPrice(d.price);
+            setPriceStatus('ready');
+          } else {
+            setPrice(null);
+            setPriceStatus('error');
+          }
           setSpecs(d.specifications ? mapSpecsFromApi(d.specifications) : DEFAULT_SPECS);
           setCurrentIndex(Math.min(imgIndex, (d.images?.length || 1) - 1));
         } else {
-          const category = mockProductCategories.find((c) => c.id === catId);
-          if (category) applyMockCategory(category, t, imgIndex, mockSetters);
+          setPrice(null);
+          setPriceStatus('error');
         }
       } catch {
         if (cancelled) return;
-        const category = mockProductCategories.find((c) => c.id === Number(categoryId));
-        if (category) {
-          applyMockCategory(category, t, byIndex ? Number(imageIndex) || 0 : 0, mockSetters);
-        }
+        setPrice(null);
+        setPriceStatus('error');
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -114,6 +111,7 @@ export function useProductDetail(categoryId, imageIndex, byIndex) {
     name,
     description,
     price,
+    priceStatus,
     folderName,
     images,
     currentIndex,

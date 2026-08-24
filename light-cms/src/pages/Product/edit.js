@@ -4,8 +4,22 @@ import { Form, Modal, message, InputNumber, Select } from 'antd';
 import { saveProduct, fetchProductDetail } from '@/services';
 import LanguageTab from '@/components/LanguageTab';
 import ImageUpload from '@/components/ImageUpload';
+import { notifyFormValidateError } from '@/utils/notifyFormValidateError';
 
 const { Item } = Form;
+const CORE_LANG_CODES = ['zh', 'en', 'ar'];
+
+function hasValue(value) {
+  return value !== undefined && value !== null && value !== '';
+}
+
+function canonicalizePrice(value) {
+  if (!hasValue(value)) return '';
+  const text = String(value).trim();
+  if (!/^(0|[1-9]\d*)(\.\d{1,2})?$/.test(text)) return text;
+  const [integerDigits, fraction = ''] = text.split('.');
+  return `${integerDigits}.${(fraction + '00').slice(0, 2)}`;
+}
 
 const Edit = ({ record, title, onSuccess, categoryOptions, languageList, children }) => {
   const [form] = Form.useForm();
@@ -81,9 +95,45 @@ const Edit = ({ record, title, onSuccess, categoryOptions, languageList, childre
         />
       ),
     },
+    {
+      name: 'price',
+      label: '价格',
+      fallbackToEnglish: false,
+      rules: [
+        { required: true, message: '请输入价格' },
+        {
+          validator: (_, value) => {
+            if (!hasValue(value)) return Promise.resolve();
+            return /^(0|[1-9]\d*)(\.\d{1,2})?$/.test(String(value).trim())
+              ? Promise.resolve()
+              : Promise.reject(new Error('请输入非负且最多两位小数的价格'));
+          },
+        },
+      ],
+      render: () => (
+        <InputNumber
+          stringMode
+          min="0"
+          precision={2}
+          style={{ width: '100%' }}
+          placeholder="请输入价格"
+        />
+      ),
+    },
   ];
 
+  const productLanguages = CORE_LANG_CODES.map((code) =>
+    languageList?.find((lang) => lang.code === code),
+  ).filter(Boolean);
+
   const handleOpen = (flag) => {
+    if (flag) {
+      const missing = CORE_LANG_CODES.filter((code) => !languageList?.some((lang) => lang.code === code));
+      if (missing.length) {
+        message.error(`缺少核心语言（${missing.join('、')}），无法编辑产品价格`);
+        return;
+      }
+    }
     setOpen(!!flag);
     if (flag) {
       if (record?.id) {
@@ -106,7 +156,6 @@ const Edit = ({ record, title, onSuccess, categoryOptions, languageList, childre
                 ? d.images.map((url) => (typeof url === 'string' ? url : url?.url)).filter(Boolean)
                 : [];
               setFieldsValue({
-                price: d.price,
                 categoryId: d.categoryId,
                 priority: d.priority,
                 images,
@@ -140,14 +189,20 @@ const Edit = ({ record, title, onSuccess, categoryOptions, languageList, childre
             filledLanguageData[code] = {};
           }
           // 对每个字段，如果缺失则用英语填充
-          fields?.forEach(field => {
-            if (!filledLanguageData[code][field.name] && enData[field.name]) {
+          fields?.forEach((field) => {
+            if (field.fallbackToEnglish === false) return;
+            if (!hasValue(filledLanguageData[code][field.name]) && hasValue(enData[field.name])) {
               filledLanguageData[code][field.name] = enData[field.name];
             }
           });
         }
       });
       
+      CORE_LANG_CODES.forEach((code) => {
+        if (!filledLanguageData[code]) filledLanguageData[code] = {};
+        filledLanguageData[code].price = canonicalizePrice(filledLanguageData[code].price);
+      });
+
       const images = Array.isArray(values.images) ? values.images : [];
       const params = {
         ...sharedFields,
@@ -163,6 +218,9 @@ const Edit = ({ record, title, onSuccess, categoryOptions, languageList, childre
           onSuccess?.();
         }
       }).finally(() => setLoading(false));
+    }).catch((error) => {
+      languageTabRef.current?.focusFirstError?.(error?.errorFields);
+      notifyFormValidateError(error, languageList);
     });
   };
 
@@ -201,9 +259,10 @@ const Edit = ({ record, title, onSuccess, categoryOptions, languageList, childre
           <LanguageTab
             ref={languageTabRef}
             form={form}
-            languages={languageList}
+            languages={productLanguages}
             fields={fields}
             record={detail ?? record}
+            requireAllLanguages
           />
           <Item
             label="图片"
@@ -211,18 +270,6 @@ const Edit = ({ record, title, onSuccess, categoryOptions, languageList, childre
             rules={[{ required: true, message: '请上传图片' }]}
           >
             <ImageUpload />
-          </Item>
-          <Item
-            label="价格"
-            name="price"
-            rules={[{ required: true, message: '请输入价格' }]}
-          >
-            <InputNumber
-              min={0}
-              precision={2}
-              style={{ width: '100%' }}
-              placeholder="请输入价格"
-            />
           </Item>
           <Item
             label="优先级"

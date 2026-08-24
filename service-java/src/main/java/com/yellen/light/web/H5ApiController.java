@@ -5,6 +5,7 @@ import static com.yellen.light.util.ApiJson.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.yellen.light.util.ContactPayloadValidator;
 import com.yellen.light.util.I18nUtils;
+import com.yellen.light.util.ProductPrices;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -120,7 +121,7 @@ public class H5ApiController {
   public Map<String, Object> productDetail(@RequestBody JsonNode body) {
     try {
       long categoryId = body.path("categoryId").asLong();
-      Long productId = body.path("productId").isNull() ? null : body.path("productId").asLong();
+      Long productId = optionalProductId(body);
       String locale = body.path("locale").asText("en");
       List<String> order = List.of(locale, "zh", "en", "ar");
       List<Map<String, Object>> cats =
@@ -133,7 +134,7 @@ public class H5ApiController {
       Map<String, Object> category = I18nUtils.pickLocale(categoryRow, List.of("name"), locale);
       List<String> images = I18nUtils.parseImages(String.valueOf(categoryRow.getOrDefault("images", "[]")));
       String name = String.valueOf(category.getOrDefault("name", ""));
-      Double price = null;
+      String price = null;
       Map<String, Object> specifications = new LinkedHashMap<>();
       specifications.put("colors", new ArrayList<>());
       specifications.put("sizes", new ArrayList<>());
@@ -144,14 +145,14 @@ public class H5ApiController {
       if (productId != null) {
         List<Map<String, Object>> prs =
             jdbc.queryForList(
-                "SELECT id, name_i18n, description_i18n, images, price, specs FROM products WHERE id = ? AND categoryId = ? AND status = 1",
+                "SELECT id, name_i18n, description_i18n, images, price_i18n, specs FROM products WHERE id = ? AND categoryId = ? AND status = 1",
                 productId,
                 categoryId);
         productRow = prs.isEmpty() ? null : prs.get(0);
       } else {
         List<Map<String, Object>> prs =
             jdbc.queryForList(
-                "SELECT id, name_i18n, description_i18n, images, price, specs FROM products WHERE categoryId = ? AND status = 1 ORDER BY priority ASC, updateTime DESC LIMIT 1",
+                "SELECT id, name_i18n, description_i18n, images, price_i18n, specs FROM products WHERE categoryId = ? AND status = 1 ORDER BY priority ASC, updateTime DESC LIMIT 1",
                 categoryId);
         productRow = prs.isEmpty() ? null : prs.get(0);
       }
@@ -162,8 +163,10 @@ public class H5ApiController {
         if (!pi.isEmpty()) {
           images = pi;
         }
-        if (productRow.get("price") != null) {
-          price = ((Number) productRow.get("price")).doubleValue();
+        price = ProductPrices.localePrice(productRow.get("price_i18n"), locale);
+        if (price == null) {
+          log.error("product {} locale {} missing canonical price", productRow.get("id"), locale);
+          return h5Err("产品价格不可用", 100001);
         }
         Map<String, Object> specs =
             I18nUtils.parseJsonObject(
@@ -291,6 +294,13 @@ public class H5ApiController {
       log.error("contact", e);
       return h5Err(e.getMessage());
     }
+  }
+
+  private static Long optionalProductId(JsonNode body) {
+    if (!body.has("productId") || body.get("productId").isNull()) {
+      return null;
+    }
+    return body.get("productId").asLong();
   }
 
   private static String text(JsonNode body, String field) {

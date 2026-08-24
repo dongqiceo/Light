@@ -34,11 +34,13 @@ export default function CategoryBlock({ category }) {
             tabIndex={0}
           >
             <div className="product-tile-img">
-              <img
-                src={getImageUrl(category, item)}
-                alt={item.name || getCategoryLabel(category, t)}
-                loading="lazy"
-              />
+              {getImageUrl(category, item) ? (
+                <img
+                  src={getImageUrl(category, item)}
+                  alt={item.name || getCategoryLabel(category, t)}
+                  loading="lazy"
+                />
+              ) : null}
             </div>
             <div className="product-tile-info">
               <span className="product-tile-name">

@@ -2,7 +2,7 @@ import { Typography } from 'antd';
 
 import styles from './index.less';
 
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 
 const WelcomePage: React.FC = () => {
   return (
@@ -12,17 +12,14 @@ const WelcomePage: React.FC = () => {
           <div className={styles.logoWrapper}>
             <img
               src={require('@/assets/logo.png')}
-              alt="YEELEN LIGHTING Logo"
+              alt="YEELEN LIGHTING CMS Logo"
               className={styles.logo}
             />
           </div>
           <div className={styles.header}>
             <Title level={1} className={styles.title}>
-              欢迎使用 YEELEN LIGHTING
+              WELCOME TO YEELEN LIGHTING CMS
             </Title>
-            <Paragraph className={styles.subtitle}>
-              现代化的内容管理系统
-            </Paragraph>
           </div>
         </div>
       </div>

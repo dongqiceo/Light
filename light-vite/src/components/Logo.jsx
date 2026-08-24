@@ -9,7 +9,6 @@ export default function Logo({ className = '', size = 'md', onClick }) {
       return;
     }
     navigate('/');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (

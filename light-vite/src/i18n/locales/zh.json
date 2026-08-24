@@ -108,6 +108,13 @@
   "footer": {
     "copyright": "© 2026 YEELEN LIGHTING. 保留所有权利。"
   },
+  "notFound": {
+    "eyebrow": "页面未找到",
+    "title": "这束光没有照到这里",
+    "description": "您访问的页面不存在或已被移动。可以返回首页，或继续浏览我们的照明产品。",
+    "backHome": "返回首页",
+    "browseProducts": "浏览产品"
+  },
   "common": {
     "products": "产品",
     "learnMore": "了解更多",

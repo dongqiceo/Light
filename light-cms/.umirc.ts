@@ -92,6 +92,11 @@ export default defineConfig({
       icon: 'MailOutlined',
       component: './ContactMessage',
     },
+    {
+      path: '*',
+      hideInMenu: true,
+      component: './404',
+    },
   ],
 
   npmClient: 'pnpm',

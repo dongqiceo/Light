@@ -26,7 +26,9 @@ export default function HomeGallery({ featured, loading }) {
               tabIndex={0}
             >
               <div className="product-img">
-                <img src={getProductImage(product)} alt={getProductName(product, t)} loading="lazy" />
+                {getProductImage(product) ? (
+                  <img src={getProductImage(product)} alt={getProductName(product, t)} loading="lazy" />
+                ) : null}
                 <div className="product-overlay">
                   <span>{t('home.viewCollection')}</span>
                 </div>

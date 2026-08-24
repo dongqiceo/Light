@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getFeaturedProducts, getProductCategories } from '../services';
-import { mockFeaturedProducts, mockProductCategories } from '../services/mockData';
 
 export function useHomeData() {
   const { i18n } = useTranslation();
@@ -18,18 +17,18 @@ export function useHomeData() {
       ]);
 
       setFeatured(
-        productsRes.status === 'fulfilled' && productsRes.value?.data
+        productsRes.status === 'fulfilled' && Array.isArray(productsRes.value?.data)
           ? productsRes.value.data
-          : mockFeaturedProducts,
+          : [],
       );
       setCategories(
-        catsRes.status === 'fulfilled' && catsRes.value?.data
+        catsRes.status === 'fulfilled' && Array.isArray(catsRes.value?.data)
           ? catsRes.value.data
-          : mockProductCategories,
+          : [],
       );
     } catch {
-      setFeatured(mockFeaturedProducts);
-      setCategories(mockProductCategories);
+      setFeatured([]);
+      setCategories([]);
     } finally {
       setLoading(false);
     }

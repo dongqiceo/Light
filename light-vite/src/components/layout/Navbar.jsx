@@ -62,7 +62,6 @@ export default function Navbar({ isHome }) {
     <Link
       to={path}
       className={`nav-link ${active(path) ? 'active' : ''}`}
-      onClick={() => window.scrollTo({ top: 0 })}
     >
       {label}
     </Link>

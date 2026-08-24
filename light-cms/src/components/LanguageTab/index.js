@@ -3,7 +3,7 @@ import { Tabs, Form, Input } from 'antd';
 
 const { Item } = Form;
 
-const LanguageTab = forwardRef(({ form, languages, fields, record }, ref) => {
+const LanguageTab = forwardRef(({ form, languages, fields, record, requireAllLanguages = false }, ref) => {
   const [activeKey, setActiveKey] = useState('');
 
   useEffect(() => {
@@ -13,8 +13,8 @@ const LanguageTab = forwardRef(({ form, languages, fields, record }, ref) => {
     }
   }, [languages]);
 
-  // 根据语言代码判断是否必选（英语必选，其他可选）
-  const isRequiredLanguage = (langCode) => langCode === 'en';
+  // requireAllLanguages：产品/分类等业务要求每种语言都必填；否则仅英语必填（如关于我们）
+  const isRequiredLanguage = (langCode) => requireAllLanguages || langCode === 'en';
 
   useEffect(() => {
     if (record && languages) {
@@ -42,9 +42,9 @@ const LanguageTab = forwardRef(({ form, languages, fields, record }, ref) => {
       const enData = {};
 
       // 第一遍：收集英语数据
-      fields?.forEach(field => {
+      fields?.forEach((field) => {
         const fieldName = `en_${field.name}`;
-        if (values[fieldName]) {
+        if (hasValue(values[fieldName])) {
           enData[field.name] = values[fieldName];
         }
       });
@@ -52,11 +52,16 @@ const LanguageTab = forwardRef(({ form, languages, fields, record }, ref) => {
       // 第二遍：遍历所有语言，缺失字段用英语填充
       languages?.forEach(lang => {
         const langData = {};
-        fields?.forEach(field => {
+        fields?.forEach((field) => {
           const fieldName = `${lang.code}_${field.name}`;
-          // 使用填充的值，如果该字段为空则用英语内容
-          const value = values[fieldName] !== undefined ? values[fieldName] : (lang.code !== 'en' ? enData[field.name] : undefined);
-          if (value) {
+          const raw = values[fieldName];
+          const value =
+            hasValue(raw)
+              ? raw
+              : lang.code !== 'en' && field.fallbackToEnglish !== false
+                ? enData[field.name]
+                : undefined;
+          if (hasValue(value)) {
             langData[field.name] = value;
           }
         });
@@ -66,6 +71,19 @@ const LanguageTab = forwardRef(({ form, languages, fields, record }, ref) => {
       });
       return result;
     },
+    /** 校验失败时切到首个出错字段所在语言页签，避免红字落在隐藏 Tab */
+    focusFirstError: (errorFields) => {
+      if (!errorFields?.length || !languages?.length) return;
+      for (const item of errorFields) {
+        const fieldName = Array.isArray(item?.name) ? item.name[0] : item?.name;
+        if (typeof fieldName !== 'string') continue;
+        const lang = languages.find((l) => fieldName.startsWith(`${l.code}_`));
+        if (lang) {
+          setActiveKey(lang.code);
+          return;
+        }
+      }
+    },
   }));
 
   const handleTabChange = (key) => {
@@ -74,7 +92,6 @@ const LanguageTab = forwardRef(({ form, languages, fields, record }, ref) => {
 
   const renderFieldsForLang = (langCode) => {
     return fields?.map(field => {
-      // 根据语言调整规则：英语必选，其他可选
       const isRequired = isRequiredLanguage(langCode);
       const adjustedRules = field.rules?.map(rule => {
         if (rule.required !== undefined) {
@@ -125,5 +142,9 @@ const LanguageTab = forwardRef(({ form, languages, fields, record }, ref) => {
 });
 
 LanguageTab.displayName = 'LanguageTab';
+
+function hasValue(value) {
+  return value !== undefined && value !== null && value !== '';
+}
 
 export default LanguageTab;

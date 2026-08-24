@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import Products from '../pages/Products';
 import ProductDetail from '../pages/ProductDetail';
 import About from '../pages/About';
+import NotFound from '../pages/NotFound';
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
       { path: 'products/:categoryId/:imageIndex', element: <ProductDetail /> },
       { path: 'product/:id', element: <ProductDetail /> },
       { path: 'about', element: <About /> },
+      { path: '*', element: <NotFound /> },
     ],
   },
 ]);

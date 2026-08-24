@@ -58,7 +58,6 @@ const Index = () => {
 
     setLoading(true);
     fetchProductList({ ...params }).then((res) => {
-      console.log('Product list response:', res);
       if (res.code === 100000) {
         setPagination({
           current: res.data?.page,
@@ -69,7 +68,6 @@ const Index = () => {
           showTotal: (total) => `共 ${total} 项`,
         });
         const content = res?.data?.content || [];
-        console.log('Product list content:', content);
         setList(content);
       }
     }).finally(() => setLoading(false));

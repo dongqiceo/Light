@@ -1,0 +1,98 @@
+.not-found {
+  position: relative;
+  min-height: max(620px, calc(100vh - var(--nav-h)));
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: calc(var(--nav-h) + 72px) 24px 96px;
+  isolation: isolate;
+}
+
+.not-found__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  width: min(70vw, 760px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 68%);
+  filter: blur(10px);
+  transform: translate(-50%, -50%);
+}
+
+.not-found__content {
+  width: min(100%, 720px);
+  text-align: center;
+}
+
+.not-found__eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.not-found__code {
+  color: transparent;
+  background: linear-gradient(135deg, var(--text), var(--accent));
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-family: var(--font-display);
+  font-size: clamp(120px, 24vw, 230px);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  line-height: 0.84;
+}
+
+.not-found h1 {
+  margin-top: 28px;
+  font-family: var(--font-display);
+  font-size: clamp(34px, 6vw, 54px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+}
+
+.not-found__description {
+  max-width: 520px;
+  margin: 20px auto 0;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.not-found__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 36px;
+}
+
+.not-found__actions .btn-primary,
+.not-found__actions .btn-outline {
+  align-items: center;
+  justify-content: center;
+  min-width: 148px;
+}
+
+@media (max-width: 520px) {
+  .not-found {
+    min-height: 560px;
+    padding: calc(var(--nav-h) + 48px) 20px 72px;
+  }
+
+  .not-found__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .not-found__actions .btn-primary,
+  .not-found__actions .btn-outline {
+    min-height: 48px;
+  }
+}

@@ -3,18 +3,55 @@ import { Form, Modal, message, InputNumber, Select } from 'antd';
 
 import { saveFeatured, fetchProductListAll, fetchProductDetail } from '@/services';
 import { resolveImageUrl } from '@/utils/resolveImageUrl';
+import { notifyFormValidateError } from '@/utils/notifyFormValidateError';
 
 const { Item } = Form;
+
+const ImagePicker = ({ id, images = [], value, onChange }) => (
+  <div
+    id={id}
+    role="group"
+    aria-label="选择展示图"
+    style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}
+  >
+    {images.map((url, index) => (
+      <button
+        type="button"
+        key={`${url}-${index}`}
+        aria-label={`选择展示图 ${index + 1}`}
+        aria-pressed={value === url}
+        onClick={() => onChange?.(url)}
+        style={{
+          display: 'block',
+          width: 80,
+          height: 80,
+          padding: 0,
+          background: 'transparent',
+          border: value === url ? '3px solid #1890ff' : '1px solid #d9d9d9',
+          borderRadius: 8,
+          overflow: 'hidden',
+          cursor: 'pointer',
+        }}
+      >
+        <img
+          src={resolveImageUrl(url)}
+          alt={`展示图 ${index + 1}`}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      </button>
+    ))}
+  </div>
+);
 
 const Edit = ({ record, title, onSuccess, children }) => {
   const [form] = Form.useForm();
   const { validateFields, setFieldsValue, resetFields } = form;
+  const selectedProductId = Form.useWatch('productId', form);
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [productOptions, setProductOptions] = useState([]);
   const [productImages, setProductImages] = useState([]);
-  const [selectedImageUrl, setSelectedImageUrl] = useState('');
 
   useEffect(() => {
     fetchProductListAll().then((res) => {
@@ -33,7 +70,6 @@ const Edit = ({ record, title, onSuccess, children }) => {
           image: record.image,
           priority: record.priority ?? 1,
         });
-        setSelectedImageUrl(record.image || '');
         if (record.productId) {
           fetchProductDetail({ id: record.productId }).then((res) => {
             if (res?.code === 100000 && res.data?.images) setProductImages(res.data.images || []);
@@ -45,14 +81,12 @@ const Edit = ({ record, title, onSuccess, children }) => {
       } else {
         resetFields();
         setProductImages([]);
-        setSelectedImageUrl('');
       }
     }
   };
 
   const handleProductChange = (productId) => {
     setFieldsValue({ image: undefined });
-    setSelectedImageUrl('');
     setProductImages([]);
     if (!productId) return;
     fetchProductDetail({ id: productId }).then((res) => {
@@ -72,12 +106,7 @@ const Edit = ({ record, title, onSuccess, children }) => {
           onSuccess?.();
         }
       }).finally(() => setLoading(false));
-    });
-  };
-
-  const handleSelectImage = (url) => {
-    setSelectedImageUrl(url);
-    setFieldsValue({ image: url });
+    }).catch(notifyFormValidateError);
   };
 
   return (
@@ -107,34 +136,15 @@ const Edit = ({ record, title, onSuccess, children }) => {
               onChange={handleProductChange}
             />
           </Item>
-          {productImages.length > 0 && (
-            <Item label="选择展示图" required>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                {productImages.map((url, index) => (
-                  <div
-                    key={`${url}-${index}`}
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => handleSelectImage(url)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleSelectImage(url)}
-                    style={{
-                      width: 80,
-                      height: 80,
-                      border: selectedImageUrl === url ? '3px solid #1890ff' : '1px solid #d9d9d9',
-                      borderRadius: 8,
-                      overflow: 'hidden',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <img src={resolveImageUrl(url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  </div>
-                ))}
-              </div>
+          {selectedProductId !== undefined && selectedProductId !== null && (
+            <Item
+              label="选择展示图"
+              name="image"
+              rules={[{ required: true, message: '请从上方选择一张展示图' }]}
+            >
+              <ImagePicker images={productImages} />
             </Item>
           )}
-          <Item name="image" hidden rules={[{ required: true, message: '请从上方选择一张展示图' }]}>
-            <input type="hidden" />
-          </Item>
           <Item name="priority" label="优先级" rules={[{ required: true, message: '请输入优先级' }]}>
             <InputNumber min={1} style={{ width: '100%' }} placeholder="请输入优先级" />
           </Item>

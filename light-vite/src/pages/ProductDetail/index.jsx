@@ -15,6 +15,7 @@ export default function ProductDetail() {
     name,
     description,
     price,
+    priceStatus,
     folderName,
     images,
     currentIndex,
@@ -38,7 +39,13 @@ export default function ProductDetail() {
               currentIndex={currentIndex}
               onSelectImage={setCurrentIndex}
             />
-            <DetailSpecs name={name} description={description} price={price} specs={specs} />
+            <DetailSpecs
+              name={name}
+              description={description}
+              price={price}
+              priceStatus={priceStatus}
+              specs={specs}
+            />
           </div>
         </div>
       </div>

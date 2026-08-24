@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 
@@ -15,7 +16,12 @@ import org.springframework.core.env.MapPropertySource;
  * 相对路径 {@code ../../services/...} 会失效。优先使用 {@code service-java/data/light.db}，再回退旧路径。
  */
 public class SqlitePathInitializer
-    implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    implements ApplicationContextInitializer<ConfigurableApplicationContext>, Ordered {
+
+  @Override
+  public int getOrder() {
+    return Ordered.HIGHEST_PRECEDENCE;
+  }
 
   private static final String PROP_DS_URL = "spring.datasource.url";
   private static final String PROP_STATIC = "light.static-path";

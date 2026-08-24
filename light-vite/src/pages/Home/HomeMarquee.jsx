@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { getCategoryLabel } from '../../utils/product';
-import { mockProductCategories } from '../../services/mockData';
 
 function MarqueeGroup({ items, t, groupKey }) {
   return (
@@ -16,7 +15,7 @@ function MarqueeGroup({ items, t, groupKey }) {
 
 export default function HomeMarquee({ categories }) {
   const { t } = useTranslation();
-  const items = categories.length ? categories : mockProductCategories;
+  const items = categories;
 
   if (!items.length) return null;
 

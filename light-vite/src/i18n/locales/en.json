@@ -108,6 +108,13 @@
   "footer": {
     "copyright": "© 2026 YEELEN LIGHTING. All rights reserved."
   },
+  "notFound": {
+    "eyebrow": "Page not found",
+    "title": "This light hasn't reached here yet",
+    "description": "The page you are looking for does not exist or has been moved. You can return to the homepage, or continue browsing our lighting products.",
+    "backHome": "Back to Home",
+    "browseProducts": "Browse Products"
+  },
   "common": {
     "products": "Products",
     "learnMore": "Learn More",

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button, Card, Form, Input, message } from 'antd';
 import { fetchSettings, saveSettings, fetchLanguageListAll } from '@/services';
 import LanguageTab from '@/components/LanguageTab';
+import { notifyFormValidateError } from '@/utils/notifyFormValidateError';
 
 const { Item } = Form;
 const { TextArea } = Input;
@@ -92,6 +93,9 @@ const Index = () => {
           }
         })
         .finally(() => setLoading(false));
+    }).catch((error) => {
+      languageTabRef.current?.focusFirstError?.(error?.errorFields);
+      notifyFormValidateError(error);
     });
   };
 

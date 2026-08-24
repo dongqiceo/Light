@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getProductCategories } from '../services';
-import { mockProductCategories } from '../services/mockData';
 
 export function useProductCategories() {
   const { i18n } = useTranslation();
@@ -15,9 +14,9 @@ export function useProductCategories() {
       setLoading(true);
       try {
         const res = await getProductCategories();
-        if (!cancelled) setCategories(res?.data || mockProductCategories);
+        if (!cancelled) setCategories(Array.isArray(res?.data) ? res.data : []);
       } catch {
-        if (!cancelled) setCategories(mockProductCategories);
+        if (!cancelled) setCategories([]);
       } finally {
         if (!cancelled) setLoading(false);
       }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Input, Switch, message, Modal } from 'antd';
 
 import { saveLanguage } from '@/services';
+import { notifyFormValidateError } from '@/utils/notifyFormValidateError';
 
 const { Item } = Form;
 
@@ -45,7 +46,7 @@ const Edit = ({ children, title, record, onSuccess }) => {
           onSuccess?.();
         }
       }).finally(() => setLoading(false));
-    });
+    }).catch(notifyFormValidateError);
   };
 
   return (

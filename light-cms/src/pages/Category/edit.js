@@ -3,6 +3,7 @@ import { Form, Modal, message, InputNumber } from 'antd';
 
 import { saveCategory } from '@/services';
 import LanguageTab from '@/components/LanguageTab';
+import { notifyFormValidateError } from '@/utils/notifyFormValidateError';
 
 const { Item } = Form;
 
@@ -76,6 +77,9 @@ const Edit = ({ record, title, view, copy, onSuccess, languageList, children }) 
           onSuccess?.();
         }
       }).finally(() => setLoading(false));
+    }).catch((error) => {
+      languageTabRef.current?.focusFirstError?.(error?.errorFields);
+      notifyFormValidateError(error, languageList);
     });
   };
 
@@ -102,6 +106,7 @@ const Edit = ({ record, title, view, copy, onSuccess, languageList, children }) 
           languages={languageList}
           fields={fields}
           record={record}
+          requireAllLanguages
         />
         <Item label="优先级" name="priority" rules={[{ required: true, message: '请输入优先级' }]}>
           <InputNumber min={1} style={{ width: '100%' }} disabled={!!view} />
