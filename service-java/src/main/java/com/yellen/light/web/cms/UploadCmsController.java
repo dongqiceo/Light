@@ -20,9 +20,6 @@ public class UploadCmsController {
   @Value("${light.upload-dir}")
   private String uploadDir;
 
-  @Value("${light.upload-base-url}")
-  private String uploadBaseUrl;
-
   @PostMapping("/upload")
   public Map<String, Object> upload(MultipartFile file) throws IOException {
     if (file == null || file.isEmpty()) {
@@ -42,8 +39,7 @@ public class UploadCmsController {
     String filename = System.currentTimeMillis() + "-" + Long.toString((long) (Math.random() * 1e12), 36) + ext;
     Path target = dir.resolve(filename);
     file.transferTo(target.toFile());
-    String base = uploadBaseUrl.endsWith("/") ? uploadBaseUrl.substring(0, uploadBaseUrl.length() - 1) : uploadBaseUrl;
-    String url = base + "/uploads/" + day + "/" + filename;
+    String url = "/uploads/" + day + "/" + filename;
     return cmsOk(Map.of("url", url), "上传成功");
   }
 }

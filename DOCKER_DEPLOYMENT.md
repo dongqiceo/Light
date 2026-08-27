@@ -39,5 +39,5 @@ docker compose up -d
 
 ## 注意
 
-- `light-cms` 静态图片 URL 现在会优先使用浏览器当前域名，如果没有设置 `STATIC_BASE`，则回退到 `http://localhost:3001`。
-- 若要在生产环境中使用自定义域名，可修改 `docker-compose.yml` 中的环境变量 `LIGHT_UPLOAD_BASE_URL`。
+- 上传接口返回相对路径（如 `/uploads/2026-08-27/xxx.jpg`），前端通过 `resolveImageUrl` 按当前域名拼接，无需配置上传域名。
+- `light-cms` 静态图片 URL 优先使用浏览器当前域名；本地 dev 可通过 `STATIC_BASE` 指向后端。
