@@ -85,3 +85,5 @@ PowerShell 也可以指定输出文件：
 tar -xf light-deployment.tar images.tar
 docker load -i images.tar
 ```
+- 上传接口返回相对路径（如 `/uploads/2026-08-27/xxx.jpg`），前端通过 `resolveImageUrl` 按当前域名拼接，无需配置上传域名。
+- `light-cms` 静态图片 URL 优先使用浏览器当前域名；本地 dev 可通过 `STATIC_BASE` 指向后端。

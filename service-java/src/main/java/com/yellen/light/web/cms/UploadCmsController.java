@@ -61,11 +61,12 @@ public class UploadCmsController {
     String filename = System.currentTimeMillis() + "-" + Long.toString((long) (Math.random() * 1e12), 36) + ext;
     Path target = dir.resolve(filename);
     file.transferTo(target.toFile());
-    String base = uploadBaseUrl.endsWith("/") ? uploadBaseUrl.substring(0, uploadBaseUrl.length() - 1) : uploadBaseUrl;
-    String url = base + "/uploads/" + day + "/" + filename;
+   
+    String url = "/uploads/" + day + "/" + filename;
     if (avatar) {
       userService.updateAvatar(extractToken(authorization), url);
     }
+
     return cmsOk(Map.of("url", url), "上传成功");
   }
 

@@ -31,6 +31,10 @@ export default defineConfig({
       target: 'http://localhost:3001',
       changeOrigin: true,
     },
+    '/uploads': {
+      target: 'http://localhost:3001',
+      changeOrigin: true,
+    },
     '/无主灯清晰图片': {
       target: 'http://localhost:3001',
       changeOrigin: true,
