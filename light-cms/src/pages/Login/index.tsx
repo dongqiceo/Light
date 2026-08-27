@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Input, message } from 'antd';
+import { Button, Form, Input, Modal, message } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { request, useNavigate } from '@umijs/max';
+import { setupInitialPassword } from '@/services';
 import './index.less';
 
 const LoginPage: React.FC = () => {
@@ -10,6 +11,8 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordModalOpen, setPasswordModalOpen] = useState(false);
+  const [passwordForm] = Form.useForm();
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -27,14 +30,39 @@ const LoginPage: React.FC = () => {
       if (response.code === 100000) {
         const { token, user } = response.data;
         localStorage.setItem('token', token);
-        message.success('登录成功');
-        navigate('/welcome');
+        localStorage.setItem('mustChangePassword', String(user?.mustChangePassword === true));
+        if (user?.mustChangePassword) {
+          setPasswordModalOpen(true);
+          message.info('首次登录请先修改密码');
+        } else {
+          message.success('登录成功');
+          navigate('/welcome');
+        }
       } else {
         message.error(response.message || '登录失败');
       }
     } catch (error: any) {
       const apiMessage = error?.data?.message ?? error?.response?.data?.message;
       message.error(apiMessage || '登录失败，请重试');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInitialPassword = async (values: { newPassword: string; confirmPassword: string }) => {
+    setLoading(true);
+    try {
+      const response = await setupInitialPassword(values);
+      if (response.code === 100000) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('mustChangePassword');
+        setPasswordModalOpen(false);
+        passwordForm.resetFields();
+        message.success('密码设置成功，请使用新密码登录');
+        navigate('/login');
+      }
+    } catch (error: any) {
+      message.error(error?.data?.message || error?.response?.data?.message || '密码设置失败');
     } finally {
       setLoading(false);
     }
@@ -91,6 +119,24 @@ const LoginPage: React.FC = () => {
           </Button>
         </div>
       </div>
+      <Modal
+        title="首次登录，请修改密码"
+        open={passwordModalOpen}
+        closable={false}
+        maskClosable={false}
+        footer={null}
+      >
+        <p>为了保护账号安全，请先设置新的登录密码。</p>
+        <Form form={passwordForm} layout="vertical" onFinish={handleInitialPassword}>
+          <Form.Item name="newPassword" label="新密码" rules={[{ required: true, message: '请输入新密码' }, { min: 8, message: '密码至少需要 8 位' }]}>
+            <Input.Password placeholder="请输入至少 8 位新密码" />
+          </Form.Item>
+          <Form.Item name="confirmPassword" label="确认新密码" dependencies={['newPassword']} rules={[{ required: true, message: '请再次输入新密码' }, ({ getFieldValue }) => ({ validator(_, value) { return !value || getFieldValue('newPassword') === value ? Promise.resolve() : Promise.reject(new Error('两次输入的新密码不一致')); } })]}>
+            <Input.Password placeholder="请再次输入新密码" />
+          </Form.Item>
+          <Button type="primary" htmlType="submit" loading={loading} block>设置密码并重新登录</Button>
+        </Form>
+      </Modal>
     </div>
   );
 };

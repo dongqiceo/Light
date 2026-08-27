@@ -1,4 +1,5 @@
 import { useAboutContact } from '../../hooks/useAboutContact';
+import SocialLinks from '../../components/SocialLinks';
 
 function IconLocation() {
   return (
@@ -83,6 +84,7 @@ export default function AboutContact() {
           );
         })}
       </ul>
+      <SocialLinks social={contact} />
     </section>
   );
 }

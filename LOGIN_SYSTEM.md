@@ -156,11 +156,20 @@ Authorization: Bearer {token}
    - 可设置过期时间
    - 依赖：`spring-boot-starter-data-redis`
 
-## 默认用户
+## 默认用户与首次改密
 
 | 用户名 | 密码 | 备注 |
 |--------|------|------|
-| admin  | admin*** | 默认管理员 |
+| admin  | admin123 | 首次登录后必须修改 |
+
+用户表中的 `must_change_password` 字段用于记录是否必须首次设置密码。已有 SQLite 数据库启动时会自动增加该字段，旧账号默认需要首次改密；密码修改成功后该字段变为 `0`。
+
+密码接口均需要 `Authorization: Bearer {token}`：
+
+- `POST /api/v1/user/password/initial`：首次设置密码，请求体为 `newPassword`、`confirmPassword`。
+- `POST /api/v1/user/password/change`：普通修改密码，请求体为 `currentPassword`、`newPassword`、`confirmPassword`。
+
+密码至少 8 位。修改成功后当前 token 失效，需要重新登录。
 
 ## 密码安全建议
 
@@ -197,7 +206,7 @@ docker compose up backend
 A: 重新登录即可。token 有效期为 7 天。
 
 ### Q: 如何修改用户密码？
-A: 当前系统未实现修改密码功能，可以在 `UserRepository.update()` 基础上实现。
+A: 首次使用临时密码登录后，系统会强制进入首次设置密码页面。正常登录后可从 CMS 侧栏进入“修改密码”，需要输入当前密码和两次新密码。
 
 ### Q: 如何添加新用户？
 A: 在 `UserRepository.save()` 基础上实现一个注册或管理员添加用户的接口。

@@ -51,8 +51,8 @@ public class UserRepository {
   }
 
   public long save(User user) {
-    String sql = "INSERT INTO users (username, password, name, nick_name, gender, create_time, update_time) "
-        + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    String sql = "INSERT INTO users (username, password, name, nick_name, gender, must_change_password, create_time, update_time) "
+      + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     try (Connection conn = DriverManager.getConnection(dbUrl);
         PreparedStatement pstmt =
             conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -61,8 +61,9 @@ public class UserRepository {
       pstmt.setString(3, user.getName());
       pstmt.setString(4, user.getNickName());
       pstmt.setString(5, user.getGender());
-      pstmt.setLong(6, user.getCreateTime());
-      pstmt.setLong(7, user.getUpdateTime());
+      pstmt.setInt(6, user.isMustChangePassword() ? 1 : 0);
+      pstmt.setLong(7, user.getCreateTime());
+      pstmt.setLong(8, user.getUpdateTime());
       pstmt.executeUpdate();
       try (ResultSet rs = pstmt.getGeneratedKeys()) {
         if (rs.next()) {
@@ -92,6 +93,32 @@ public class UserRepository {
     }
   }
 
+  public void updatePassword(long userId, String password) {
+    String sql = "UPDATE users SET password = ?, must_change_password = 0, update_time = ? WHERE id = ?";
+    try (Connection conn = DriverManager.getConnection(dbUrl);
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+      pstmt.setString(1, password);
+      pstmt.setLong(2, System.currentTimeMillis());
+      pstmt.setLong(3, userId);
+      pstmt.executeUpdate();
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to update user password", e);
+    }
+  }
+
+  public void updateAvatar(long userId, String avatar) {
+    String sql = "UPDATE users SET avatar = ?, update_time = ? WHERE id = ?";
+    try (Connection conn = DriverManager.getConnection(dbUrl);
+        PreparedStatement pstmt = conn.prepareStatement(sql)) {
+      pstmt.setString(1, avatar);
+      pstmt.setLong(2, System.currentTimeMillis());
+      pstmt.setLong(3, userId);
+      pstmt.executeUpdate();
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to update user avatar", e);
+    }
+  }
+
   private User mapUser(ResultSet rs) throws Exception {
     User user = new User();
     user.setId(rs.getLong("id"));
@@ -100,9 +127,11 @@ public class UserRepository {
     user.setName(rs.getString("name"));
     user.setNickName(rs.getString("nick_name"));
     user.setGender(rs.getString("gender"));
+    user.setAvatar(rs.getString("avatar"));
     user.setCreateTime(rs.getLong("create_time"));
     user.setUpdateTime(rs.getLong("update_time"));
     user.setActive(rs.getInt("active") == 1);
+    user.setMustChangePassword(rs.getInt("must_change_password") == 1);
     return user;
   }
 }

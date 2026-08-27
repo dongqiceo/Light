@@ -1,7 +1,9 @@
 // 运行时配置
 
+import React from 'react';
 import { message } from 'antd';
 import { request as requestHelper, history } from '@umijs/max';
+import UserMenu from '@/components/UserMenu';
 
 // 全局初始化数据配置，用于 Layout 用户信息和权限初始化
 // 更多信息见文档：https://umijs.org/docs/api/runtime-config#getinitialstate
@@ -18,6 +20,7 @@ export async function getInitialState() {
       });
       
       if (response.code === 100000 && response.data) {
+        localStorage.setItem('mustChangePassword', String(response.data.mustChangePassword === true));
         return {
           token,
           user: response.data,
@@ -38,6 +41,11 @@ export const layout = () => {
     menu: {
       locale: false,
     },
+    rightRender: (initialState: any, setInitialState: any, runtimeConfig: any) => React.createElement(UserMenu, {
+      initialState,
+      setInitialState,
+      logout: runtimeConfig.logout,
+    }),
     logout: async () => {
       try {
         const token = localStorage.getItem('token');
@@ -48,6 +56,7 @@ export const layout = () => {
           },
         });
         localStorage.removeItem('token');
+        localStorage.removeItem('mustChangePassword');
         message.success('退出成功');
         history.replace('/login');
         return true;
@@ -111,10 +120,14 @@ export const request = {
 export function onRouteChange({ matchedRoutes, location }: any) {
   const token = localStorage.getItem('token');
   const isLoginPage = location.pathname === '/login';
+  const isPasswordSetupPage = location.pathname === '/password-setup';
+  const mustChangePassword = localStorage.getItem('mustChangePassword') === 'true';
   
   if (!token && !isLoginPage) {
     history.replace('/login');
   } else if (token && isLoginPage) {
-    history.replace('/welcome');
+    history.replace(mustChangePassword ? '/password-setup' : '/welcome');
+  } else if (token && mustChangePassword && !isPasswordSetupPage) {
+    history.replace('/password-setup');
   }
 }

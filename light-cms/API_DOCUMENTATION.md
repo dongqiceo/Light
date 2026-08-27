@@ -1,3 +1,33 @@
+# 密码管理接口
+
+## 首次设置密码
+
+`POST /api/v1/user/password/initial`
+
+首次使用临时密码登录后，账号只能访问当前用户、退出和此接口。请求体：
+
+```json
+{
+  "newPassword": "new-password",
+  "confirmPassword": "new-password"
+}
+```
+
+## 修改密码
+
+`POST /api/v1/user/password/change`
+
+正常登录后在 CMS 的“修改密码”页面使用此接口。请求体：
+
+```json
+{
+  "currentPassword": "old-password",
+  "newPassword": "new-password",
+  "confirmPassword": "new-password"
+}
+```
+
+密码至少 8 位，服务端会校验旧密码和两次新密码是否一致。成功后当前 token 失效，需要重新登录。
 # API 接口文档
 
 ## 基础信息

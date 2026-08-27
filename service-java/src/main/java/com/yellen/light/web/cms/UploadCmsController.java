@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestHeader;
+import com.yellen.light.service.UserService;
 
 @RestController
 @RequestMapping("/light-cms")
@@ -23,8 +25,25 @@ public class UploadCmsController {
   @Value("${light.upload-base-url}")
   private String uploadBaseUrl;
 
+  private final UserService userService;
+
+  public UploadCmsController(UserService userService) {
+    this.userService = userService;
+  }
+
   @PostMapping("/upload")
-  public Map<String, Object> upload(MultipartFile file) throws IOException {
+  public Map<String, Object> upload(MultipartFile file,
+      @RequestHeader(value = "Authorization", required = false) String authorization) throws IOException {
+    return saveFile(file, false, authorization);
+  }
+
+  @PostMapping("/user/avatar")
+  public Map<String, Object> uploadAvatar(MultipartFile file,
+      @RequestHeader(value = "Authorization", required = false) String authorization) throws IOException {
+    return saveFile(file, true, authorization);
+  }
+
+  private Map<String, Object> saveFile(MultipartFile file, boolean avatar, String authorization) throws IOException {
     if (file == null || file.isEmpty()) {
       return cmsErr("请选择要上传的图片", 100002);
     }
@@ -44,6 +63,14 @@ public class UploadCmsController {
     file.transferTo(target.toFile());
     String base = uploadBaseUrl.endsWith("/") ? uploadBaseUrl.substring(0, uploadBaseUrl.length() - 1) : uploadBaseUrl;
     String url = base + "/uploads/" + day + "/" + filename;
+    if (avatar) {
+      userService.updateAvatar(extractToken(authorization), url);
+    }
     return cmsOk(Map.of("url", url), "上传成功");
+  }
+
+  private String extractToken(String authorization) {
+    return authorization != null && authorization.startsWith("Bearer ")
+        ? authorization.substring(7) : authorization;
   }
 }

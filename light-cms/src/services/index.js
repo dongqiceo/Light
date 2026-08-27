@@ -6,6 +6,14 @@ async function sendRequest(url, { method, data, params }) {
   return request(url, { method, data, params });
 }
 
+export async function setupInitialPassword(data) {
+  return request('/api/v1/user/password/initial', { method: 'POST', data });
+}
+
+export async function changePassword(data) {
+  return request('/api/v1/user/password/change', { method: 'POST', data });
+}
+
 /** 分类管理 **/
 export async function fetchCategoryList(data) {
   return sendRequest(`${BASE_SERVICE}/category/list`, { method: 'POST', data });
@@ -170,4 +178,6 @@ export default {
   fetchI18nListAll,
   saveI18n,
   deleteI18n,
+  setupInitialPassword,
+  changePassword,
 };

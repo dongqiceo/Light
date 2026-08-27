@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { getProductName } from '../../utils/product';
+import { useAboutContact } from '../../hooks/useAboutContact';
+import SocialLinks from '../../components/SocialLinks';
 
 export default function HomeAbout({ featured }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { contact } = useAboutContact();
   const heroProduct = featured[0];
   const heroSrc = heroProduct?.image;
 
@@ -20,6 +23,7 @@ export default function HomeAbout({ featured }) {
           <span className="section-label">{t('nav.about')}</span>
           <h2 className="section-heading">YEELEN</h2>
           <p className="section-body">{t('about.description')}</p>
+          <SocialLinks social={contact} />
           <button type="button" className="btn-outline" onClick={() => navigate('/about')}>
             {t('common.learnMore')}
           </button>

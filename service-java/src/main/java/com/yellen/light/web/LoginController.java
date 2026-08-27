@@ -5,7 +5,9 @@ import static com.yellen.light.util.ApiJson.*;
 import com.yellen.light.entity.User;
 import com.yellen.light.service.UserService;
 import com.yellen.light.service.UserService.LoginResult;
+import com.yellen.light.service.UserService.PasswordResult;
 import java.util.Map;
+import java.util.LinkedHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,12 +42,7 @@ public class LoginController {
       return cmsErr(result.message, 401);
     }
 
-    Map<String, Object> userData = Map.of(
-        "id", result.user.getId(),
-        "name", result.user.getName(),
-        "nickName", result.user.getNickName(),
-        "gender", result.user.getGender()
-    );
+    Map<String, Object> userData = userData(result.user);
 
     return cmsOk(Map.of(
         "token", result.token,
@@ -83,15 +80,44 @@ public class LoginController {
       return cmsErr("token 无效或已过期", 401);
     }
 
-    Map<String, Object> userData = Map.of(
-        "id", user.getId(),
-        "username", user.getUsername(),
-        "name", user.getName(),
-        "nickName", user.getNickName(),
-        "gender", user.getGender()
-    );
+    Map<String, Object> userData = userData(user);
 
     return cmsOk(userData, "获取成功");
+  }
+
+  @PostMapping("/user/password/initial")
+  public Map<String, Object> initialPassword(@RequestHeader(value = "Authorization", required = false) String token,
+      @RequestBody PasswordRequest request) {
+    PasswordResult result = userService.changePassword(extractToken(token), null,
+        request.getNewPassword(), request.getConfirmPassword(), true);
+    return result.success ? cmsOk(null, result.message) : cmsErr(result.message, 400);
+  }
+
+  @PostMapping("/user/password/change")
+  public Map<String, Object> changePassword(@RequestHeader(value = "Authorization", required = false) String token,
+      @RequestBody PasswordRequest request) {
+    PasswordResult result = userService.changePassword(extractToken(token), request.getCurrentPassword(),
+        request.getNewPassword(), request.getConfirmPassword(), false);
+    return result.success ? cmsOk(null, result.message) : cmsErr(result.message, 400);
+  }
+
+  private String extractToken(String authorization) {
+    if (authorization != null && authorization.startsWith("Bearer ")) {
+      return authorization.substring(7);
+    }
+    return authorization;
+  }
+
+  private Map<String, Object> userData(User user) {
+    Map<String, Object> data = new LinkedHashMap<>();
+    data.put("id", user.getId());
+    data.put("username", user.getUsername());
+    data.put("name", user.getName());
+    data.put("nickName", user.getNickName());
+    data.put("gender", user.getGender());
+    data.put("avatar", user.getAvatar());
+    data.put("mustChangePassword", user.isMustChangePassword());
+    return data;
   }
 
   /**
@@ -116,5 +142,18 @@ public class LoginController {
     public void setPassword(String password) {
       this.password = password;
     }
+  }
+
+  public static class PasswordRequest {
+    private String currentPassword;
+    private String newPassword;
+    private String confirmPassword;
+
+    public String getCurrentPassword() { return currentPassword; }
+    public void setCurrentPassword(String currentPassword) { this.currentPassword = currentPassword; }
+    public String getNewPassword() { return newPassword; }
+    public void setNewPassword(String newPassword) { this.newPassword = newPassword; }
+    public String getConfirmPassword() { return confirmPassword; }
+    public void setConfirmPassword(String confirmPassword) { this.confirmPassword = confirmPassword; }
   }
 }

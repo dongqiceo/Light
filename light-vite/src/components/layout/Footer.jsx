@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useAboutContact } from '../../hooks/useAboutContact';
+import SocialLinks from '../SocialLinks';
 
 function IconLocation() {
   return (
@@ -83,6 +84,8 @@ export default function Footer() {
             );
           })}
         </ul>
+
+        <SocialLinks social={contact} />
 
         <p className="footer-copy">{t('footer.copyright')}</p>
       </div>

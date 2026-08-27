@@ -246,6 +246,7 @@ public class H5ApiController {
   @PostMapping("/settings")
   public Map<String, Object> settings(@RequestBody(required = false) JsonNode body) {
     try {
+      ensureSocialColumns();
       String locale = body != null && !body.isNull() ? body.path("locale").asText("en") : "en";
       List<String> order = List.of(locale, "zh", "en", "ar");
       List<Map<String, Object>> rows = jdbc.queryForList("SELECT * FROM settings ORDER BY id DESC LIMIT 1");
@@ -259,10 +260,23 @@ public class H5ApiController {
       out.put("address", row.get("address") != null ? String.valueOf(row.get("address")) : "");
       out.put("email", row.get("contactEmail") != null ? String.valueOf(row.get("contactEmail")) : "");
       out.put("phone", row.get("contactPhone") != null ? String.valueOf(row.get("contactPhone")) : "");
+      out.put("facebook", row.get("facebook") != null ? String.valueOf(row.get("facebook")) : "");
+      out.put("tiktok", row.get("tiktok") != null ? String.valueOf(row.get("tiktok")) : "");
+      out.put("whatsapp", row.get("whatsapp") != null ? String.valueOf(row.get("whatsapp")) : "");
+      out.put("instagram", row.get("instagram") != null ? String.valueOf(row.get("instagram")) : "");
       return h5Ok(out);
     } catch (Exception e) {
       log.error("settings", e);
       return h5Err(e.getMessage());
+    }
+  }
+
+  private void ensureSocialColumns() {
+    for (String column : List.of("facebook", "tiktok", "whatsapp", "instagram")) {
+      try {
+        jdbc.execute("ALTER TABLE settings ADD COLUMN " + column + " TEXT");
+      } catch (Exception ignored) {
+      }
     }
   }
 

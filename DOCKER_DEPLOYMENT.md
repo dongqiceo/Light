@@ -41,3 +41,47 @@ docker compose up -d
 
 - `light-cms` 静态图片 URL 现在会优先使用浏览器当前域名，如果没有设置 `STATIC_BASE`，则回退到 `http://localhost:3001`。
 - 若要在生产环境中使用自定义域名，可修改 `docker-compose.yml` 中的环境变量 `LIGHT_UPLOAD_BASE_URL`。
+
+## 运行docker容器命令
+$Env:http_proxy="http://127.0.0.1:7890";$Env:https_proxy="http://127.0.0.1:7890"
+docker-compose up -d --build
+
+## 打包全部镜像和运行数据
+
+在项目根目录执行：
+
+```bash
+bash ./package-docker.sh
+```
+
+PowerShell 使用：
+
+```powershell
+.\package-docker.ps1
+```
+
+脚本会先构建 `backend`、`web`、`cms` 三个镜像，然后生成 `light-deployment.tar`。压缩包内包含：
+
+- 三个 Docker 镜像（内部文件名为 `images.tar`）
+- `service-java/light/public` 静态资源和上传文件
+- `service-java/data` SQLite 数据库目录
+- `docker-compose.yml`
+
+也可以指定输出文件：
+
+```bash
+bash ./package-docker.sh /tmp/light-deployment.tar
+```
+
+PowerShell 也可以指定输出文件：
+
+```powershell
+.\package-docker.ps1 .\light-deployment.tar
+```
+
+在目标机器恢复镜像：
+
+```bash
+tar -xf light-deployment.tar images.tar
+docker load -i images.tar
+```

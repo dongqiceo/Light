@@ -12,15 +12,22 @@ const ABOUT_FIELDS = [
     name: 'tagline',
     label: '标语',
     placeholder: '如：专注磁吸照明',
-    rules: [{ required: true, message: '请输入标语' }],
+    rules: [],
   },
   {
     name: 'intro',
     label: '公司简介',
     placeholder: '如：YEELEN LIGHTING 专注于 LED 照明设计…',
-    rules: [{ required: true, message: '请输入公司简介' }],
+    rules: [],
     render: () => <TextArea rows={3} placeholder="请输入公司简介" />,
   },
+];
+
+const SOCIAL_FIELDS = [
+  { name: 'facebook', label: 'Facebook 链接', placeholder: 'https://facebook.com/...' },
+  { name: 'tiktok', label: 'TikTok 链接', placeholder: 'https://tiktok.com/@...' },
+  { name: 'whatsapp', label: 'WhatsApp 链接', placeholder: 'https://wa.me/...' },
+  { name: 'instagram', label: 'Instagram 链接', placeholder: 'https://instagram.com/...' },
 ];
 
 const Index = () => {
@@ -50,6 +57,7 @@ const Index = () => {
             contactEmail: res.data?.contactEmail,
             contactPhone: res.data?.contactPhone,
             address: res.data?.address,
+            ...SOCIAL_FIELDS.reduce((values, field) => ({ ...values, [field.name]: res.data?.[field.name] }), {}),
           });
         }
       })
@@ -83,6 +91,7 @@ const Index = () => {
         contactEmail: values.contactEmail,
         contactPhone: values.contactPhone,
         address: values.address,
+        ...SOCIAL_FIELDS.reduce((social, field) => ({ ...social, [field.name]: values[field.name] }), {}),
       };
       setLoading(true);
       saveSettings(params)
@@ -113,29 +122,34 @@ const Index = () => {
         <Item
           label="地址"
           name="address"
-          rules={[{ required: true, message: '请输入地址' }]}
+          rules={[]}
         >
-          <TextArea rows={2} allowClear placeholder="公司地址" />
+          <TextArea rows={2} allowClear placeholder="公司地址（留空则不修改）" />
         </Item>
 
         <Item
           label="邮箱"
           name="contactEmail"
           rules={[
-            { required: true, message: '请输入邮箱' },
             { type: 'email', message: '邮箱格式不正确' },
           ]}
         >
-          <Input allowClear placeholder="yeelen_magnetic@outlook.com" />
+          <Input allowClear placeholder="邮箱（留空则不修改）" />
         </Item>
 
         <Item
           label="电话"
           name="contactPhone"
-          rules={[{ required: true, message: '请输入电话' }]}
+          rules={[]}
         >
-          <Input allowClear placeholder="+86-15270820556" />
+          <Input allowClear placeholder="电话（留空则不修改）" />
         </Item>
+
+        {SOCIAL_FIELDS.map((field) => (
+          <Item key={field.name} label={field.label} name={field.name} rules={[{ type: 'url', message: '请输入有效链接' }]}>
+            <Input allowClear placeholder={`${field.placeholder}（留空则不修改）`} />
+          </Item>
+        ))}
 
         <Item>
           <Button type="primary" onClick={handleSave} loading={loading}>

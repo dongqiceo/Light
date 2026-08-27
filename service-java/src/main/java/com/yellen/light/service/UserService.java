@@ -87,6 +87,38 @@ public class UserService {
     }
   }
 
+  public boolean updateAvatar(String token, String avatar) {
+    User user = getUserByToken(token);
+    if (user == null || avatar == null || avatar.isBlank()) {
+      return false;
+    }
+    userRepository.updateAvatar(user.getId(), avatar);
+    return true;
+  }
+
+  public PasswordResult changePassword(String token, String currentPassword, String newPassword,
+      String confirmPassword, boolean initialSetup) {
+    User user = getUserByToken(token);
+    if (user == null) {
+      return new PasswordResult(false, "token 无效或已过期");
+    }
+    if (newPassword == null || newPassword.length() < 8) {
+      return new PasswordResult(false, "新密码至少需要 8 位");
+    }
+    if (!newPassword.equals(confirmPassword)) {
+      return new PasswordResult(false, "两次输入的新密码不一致");
+    }
+    if (initialSetup && !user.isMustChangePassword()) {
+      return new PasswordResult(false, "当前账号不需要首次设置密码");
+    }
+    if (!initialSetup && (currentPassword == null || !currentPassword.equals(user.getPassword()))) {
+      return new PasswordResult(false, "当前密码错误");
+    }
+    userRepository.updatePassword(user.getId(), newPassword);
+    logout(token);
+    return new PasswordResult(true, "密码修改成功");
+  }
+
   /**
    * 生成随机 token
    */
@@ -123,6 +155,16 @@ public class UserService {
       this.message = message;
       this.token = token;
       this.user = user;
+    }
+  }
+
+  public static class PasswordResult {
+    public boolean success;
+    public String message;
+
+    public PasswordResult(boolean success, String message) {
+      this.success = success;
+      this.message = message;
     }
   }
 }

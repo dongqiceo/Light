@@ -57,6 +57,20 @@ export default defineConfig({
       component: './Welcome',
     },
     {
+      name: '首次设置密码',
+      path: '/password-setup',
+      hideInMenu: true,
+      component: './PasswordSetup',
+      layout: false,
+    },
+    {
+      name: '修改密码',
+      path: '/change-password',
+      hideInMenu: true,
+      icon: 'LockOutlined',
+      component: './ChangePassword',
+    },
+    {
       name: '语言管理',
       path: '/language',
       icon: 'GlobalOutlined',

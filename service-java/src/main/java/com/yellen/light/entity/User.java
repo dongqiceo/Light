@@ -15,9 +15,11 @@ public class User {
   private String nickName;
   private String name;
   private String gender;
+  private String avatar;
   private long createTime;
   private long updateTime;
   private boolean active;
+  private boolean mustChangePassword;
 
   public User() {}
 
@@ -80,6 +82,14 @@ public class User {
     this.gender = gender;
   }
 
+  public String getAvatar() {
+    return avatar;
+  }
+
+  public void setAvatar(String avatar) {
+    this.avatar = avatar;
+  }
+
   public long getCreateTime() {
     return createTime;
   }
@@ -102,5 +112,13 @@ public class User {
 
   public void setActive(boolean active) {
     this.active = active;
+  }
+
+  public boolean isMustChangePassword() {
+    return mustChangePassword;
+  }
+
+  public void setMustChangePassword(boolean mustChangePassword) {
+    this.mustChangePassword = mustChangePassword;
   }
 }
