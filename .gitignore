@@ -16,3 +16,4 @@ docs/**
 service-java/target/
 *.tar
 service-java/data
+*.db*
