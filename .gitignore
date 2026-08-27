@@ -14,3 +14,4 @@
 .workflow
 docs/**
 service-java/target/
+service-java/data
