@@ -1,10 +1,6 @@
 version: '3.8'
-
 services:
   backend:
-    build:
-      context: ./service-java
-      dockerfile: Dockerfile
     image: light-backend:latest
     ports:
       - "3001:3001"
@@ -13,26 +9,34 @@ services:
       - LIGHT_STATIC_PATH=/app/light/public
       - LIGHT_ASSETS_PATH=/app/light/public/uploads
       - LIGHT_UPLOAD_DIR=/app/light/public/uploads
+      - LIGHT_UPLOAD_BASE_URL=http://localhost:3001
     volumes:
       - ./service-java/light/public:/app/light/public
       - ./service-java/data:/app/data
-
   web:
-    build:
-      context: ./light-vite
-      dockerfile: Dockerfile
     image: light-web:latest
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - backend
-
+    volumes:
+      - ./letsencrypt:/etc/letsencrypt
+      - ./certbot-www:/var/www/certbot
+      - /etc/admin-web-nginx-conf:/etc/nginx/conf.d:ro
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - ./letsencrypt:/etc/letsencrypt
+      - ./certbot-www:/var/www/certbot
   cms:
-    build:
-      context: ./light-cms
-      dockerfile: Dockerfile
     image: light-cms:latest
     ports:
       - "17070:80"
+      - "17072:443"
     depends_on:
       - backend
+    volumes:
+      - ./letsencrypt:/etc/letsencrypt
+      - ./certbot-www:/var/www/certbot
+      - /etc/admin-cms-nginx-conf:/etc/nginx/conf.d:ro
